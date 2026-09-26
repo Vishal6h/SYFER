@@ -187,6 +187,24 @@ def create_run_dir(mode):
     return path
 
 
+def make_training_arguments(config, run_dir, smoke, bf16, TrainingArguments):
+    """Build Trainer settings without loading a model or starting training."""
+    settings = config["training"]
+    # Transformers 5 interprets a float warmup_steps below 1 as a ratio of total steps.
+    return TrainingArguments(
+        output_dir=str(run_dir),
+        num_train_epochs=1 if smoke else settings["epochs"], max_steps=1 if smoke else -1,
+        per_device_train_batch_size=settings["per_device_batch_size"], per_device_eval_batch_size=1,
+        gradient_accumulation_steps=1 if smoke else settings["gradient_accumulation_steps"],
+        learning_rate=settings["learning_rate"], warmup_steps=settings["warmup_ratio"],
+        weight_decay=settings["weight_decay"], max_grad_norm=settings["max_grad_norm"],
+        bf16=bf16, fp16=not bf16,
+        logging_strategy="steps", logging_steps=settings["logging_steps"], logging_first_step=True,
+        eval_strategy="no" if smoke else "epoch", save_strategy="no", report_to="none", optim="adamw_torch",
+        remove_unused_columns=False, dataloader_pin_memory=False, seed=config["seed"],
+    )
+
+
 def train(config, train_messages, validation_messages, smoke):
     import torch
     from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
@@ -262,19 +280,7 @@ def train(config, train_messages, validation_messages, smoke):
                                     for item in features], dtype=torch.long),
         }
 
-    settings = config["training"]
-    args = TrainingArguments(
-        output_dir=str(run_dir),
-        num_train_epochs=1 if smoke else settings["epochs"], max_steps=1 if smoke else -1,
-        per_device_train_batch_size=settings["per_device_batch_size"], per_device_eval_batch_size=1,
-        gradient_accumulation_steps=1 if smoke else settings["gradient_accumulation_steps"],
-        learning_rate=settings["learning_rate"], warmup_ratio=settings["warmup_ratio"],
-        weight_decay=settings["weight_decay"], max_grad_norm=settings["max_grad_norm"],
-        bf16=dtype == torch.bfloat16, fp16=dtype == torch.float16,
-        logging_strategy="steps", logging_steps=settings["logging_steps"], logging_first_step=True,
-        eval_strategy="no" if smoke else "epoch", save_strategy="no", report_to="none", optim="adamw_torch",
-        remove_unused_columns=False, dataloader_pin_memory=False, seed=config["seed"],
-    )
+    args = make_training_arguments(config, run_dir, smoke, dtype == torch.bfloat16, TrainingArguments)
     trainer = Trainer(model=model, args=args, train_dataset=EncodedDataset(train_items),
                       eval_dataset=EncodedDataset(validation_items), data_collator=collate,
                       processing_class=tokenizer)
