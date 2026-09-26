@@ -1,0 +1,1091 @@
+[
+  {
+    "id": "fh_paren_depth",
+    "category": "Simple coding",
+    "kind": "python",
+    "prompt": "Write max_paren_depth(text): ignore non-parenthesis characters, return maximum nesting depth, or -1 if the parentheses are unbalanced. Return only Python function definitions, with no imports or example calls.",
+    "reference": "def max_paren_depth(text):\n    depth = peak = 0\n    for char in text:\n        if char == '(':\n            depth += 1\n            peak = max(peak, depth)\n        elif char == ')':\n            depth -= 1\n            if depth < 0:\n                return -1\n    return peak if depth == 0 else -1",
+    "cases": [
+      {
+        "function": "max_paren_depth",
+        "args": [
+          "(x(y))"
+        ],
+        "expected": 2
+      },
+      {
+        "function": "max_paren_depth",
+        "args": [
+          "(()"
+        ],
+        "expected": -1
+      },
+      {
+        "function": "max_paren_depth",
+        "args": [
+          ")("
+        ],
+        "expected": -1
+      },
+      {
+        "function": "max_paren_depth",
+        "args": [
+          ""
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "fh_merge_sorted",
+    "category": "Simple coding",
+    "kind": "python",
+    "prompt": "Write merge_sorted_lists(left, right) for two sorted integer lists. Return one sorted list containing every value, including duplicates. Return only Python function definitions, with no imports or example calls.",
+    "reference": "def merge_sorted_lists(left, right):\n    i = j = 0\n    result = []\n    while i < len(left) and j < len(right):\n        if left[i] <= right[j]:\n            result.append(left[i]); i += 1\n        else:\n            result.append(right[j]); j += 1\n    return result + left[i:] + right[j:]",
+    "cases": [
+      {
+        "function": "merge_sorted_lists",
+        "args": [
+          [
+            -5,
+            2,
+            9
+          ],
+          [
+            0,
+            2,
+            10
+          ]
+        ],
+        "expected": [
+          -5,
+          0,
+          2,
+          2,
+          9,
+          10
+        ]
+      },
+      {
+        "function": "merge_sorted_lists",
+        "args": [
+          [],
+          [
+            4,
+            8
+          ]
+        ],
+        "expected": [
+          4,
+          8
+        ]
+      },
+      {
+        "function": "merge_sorted_lists",
+        "args": [
+          [
+            6
+          ],
+          []
+        ],
+        "expected": [
+          6
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fh_transpose_grid",
+    "category": "Simple coding",
+    "kind": "python",
+    "prompt": "Write transpose_grid(rows) for a rectangular list of lists; columns become rows. An empty grid returns an empty list. Return only Python function definitions, with no imports or example calls.",
+    "reference": "def transpose_grid(rows):\n    if not rows:\n        return []\n    return [[row[column] for row in rows] for column in range(len(rows[0]))]",
+    "cases": [
+      {
+        "function": "transpose_grid",
+        "args": [
+          [
+            [
+              1,
+              2,
+              3
+            ],
+            [
+              4,
+              5,
+              6
+            ]
+          ]
+        ],
+        "expected": [
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            6
+          ]
+        ]
+      },
+      {
+        "function": "transpose_grid",
+        "args": [
+          [
+            [
+              7
+            ]
+          ]
+        ],
+        "expected": [
+          [
+            7
+          ]
+        ]
+      },
+      {
+        "function": "transpose_grid",
+        "args": [
+          []
+        ],
+        "expected": []
+      }
+    ]
+  },
+  {
+    "id": "fh_digital_root",
+    "category": "Simple coding",
+    "kind": "python",
+    "prompt": "Write digital_root(number) for a nonnegative integer: repeatedly sum decimal digits until one digit remains. Return only Python function definitions, with no imports or example calls.",
+    "reference": "def digital_root(number):\n    while number >= 10:\n        total = 0\n        while number:\n            total += number % 10\n            number //= 10\n        number = total\n    return number",
+    "cases": [
+      {
+        "function": "digital_root",
+        "args": [
+          9875
+        ],
+        "expected": 2
+      },
+      {
+        "function": "digital_root",
+        "args": [
+          0
+        ],
+        "expected": 0
+      },
+      {
+        "function": "digital_root",
+        "args": [
+          99999
+        ],
+        "expected": 9
+      },
+      {
+        "function": "digital_root",
+        "args": [
+          18
+        ],
+        "expected": 9
+      }
+    ]
+  },
+  {
+    "id": "fh_leap_century",
+    "category": "Bug fixing",
+    "kind": "python",
+    "prompt": "Fix is_leap_year so century years are leap years only when divisible by 400. Return only Python function definitions, with no imports or example calls.\n\ndef is_leap_year(year):\n    return year % 4 == 0",
+    "reference": "def is_leap_year(year):\n    return year % 400 == 0 or (year % 4 == 0 and year % 100 != 0)",
+    "cases": [
+      {
+        "function": "is_leap_year",
+        "args": [
+          2000
+        ],
+        "expected": true
+      },
+      {
+        "function": "is_leap_year",
+        "args": [
+          1900
+        ],
+        "expected": false
+      },
+      {
+        "function": "is_leap_year",
+        "args": [
+          2024
+        ],
+        "expected": true
+      },
+      {
+        "function": "is_leap_year",
+        "args": [
+          2023
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "fh_binary_search",
+    "category": "Bug fixing",
+    "kind": "python",
+    "prompt": "Fix binary_search(values, target) for a sorted list of distinct integers; return its index or -1 if absent. Check the first and last positions and empty input. Return only Python function definitions, with no imports or example calls.\n\ndef binary_search(values, target):\n    low, high = 0, len(values)\n    while low < high:\n        middle = (low + high) // 2\n        if values[middle] == target:\n            return middle\n        if values[middle] < target:\n            low = middle + 1\n        else:\n            high = middle - 1\n    return -1",
+    "reference": "def binary_search(values, target):\n    low, high = 0, len(values) - 1\n    while low <= high:\n        middle = (low + high) // 2\n        if values[middle] == target:\n            return middle\n        if values[middle] < target:\n            low = middle + 1\n        else:\n            high = middle - 1\n    return -1",
+    "cases": [
+      {
+        "function": "binary_search",
+        "args": [
+          [
+            1,
+            4,
+            9,
+            15
+          ],
+          15
+        ],
+        "expected": 3
+      },
+      {
+        "function": "binary_search",
+        "args": [
+          [
+            1,
+            4,
+            9,
+            15
+          ],
+          1
+        ],
+        "expected": 0
+      },
+      {
+        "function": "binary_search",
+        "args": [
+          [
+            1,
+            4,
+            9,
+            15
+          ],
+          8
+        ],
+        "expected": -1
+      },
+      {
+        "function": "binary_search",
+        "args": [
+          [],
+          4
+        ],
+        "expected": -1
+      }
+    ]
+  },
+  {
+    "id": "fh_binary_digits",
+    "category": "Bug fixing",
+    "kind": "python",
+    "prompt": "Fix to_binary(number) for nonnegative integers. It must include the zero case and put most significant bits first. Return only Python function definitions, with no imports or example calls.\n\ndef to_binary(number):\n    digits = ''\n    while number:\n        digits += str(number % 2)\n        number //= 2\n    return digits",
+    "reference": "def to_binary(number):\n    if number == 0:\n        return '0'\n    digits = ''\n    while number:\n        digits = str(number % 2) + digits\n        number //= 2\n    return digits",
+    "cases": [
+      {
+        "function": "to_binary",
+        "args": [
+          0
+        ],
+        "expected": "0"
+      },
+      {
+        "function": "to_binary",
+        "args": [
+          6
+        ],
+        "expected": "110"
+      },
+      {
+        "function": "to_binary",
+        "args": [
+          13
+        ],
+        "expected": "1101"
+      },
+      {
+        "function": "to_binary",
+        "args": [
+          1
+        ],
+        "expected": "1"
+      }
+    ]
+  },
+  {
+    "id": "fh_common_prefix",
+    "category": "Bug fixing",
+    "kind": "python",
+    "prompt": "Fix common_prefix(left, right) to return the longest prefix shared by both strings, even when one is empty or shorter. Return only Python function definitions, with no imports or example calls.\n\ndef common_prefix(left, right):\n    prefix = ''\n    for index in range(len(left)):\n        if left[index] != right[index]:\n            break\n        prefix += left[index]\n    return prefix",
+    "reference": "def common_prefix(left, right):\n    prefix = ''\n    for index in range(min(len(left), len(right))):\n        if left[index] != right[index]:\n            break\n        prefix += left[index]\n    return prefix",
+    "cases": [
+      {
+        "function": "common_prefix",
+        "args": [
+          "interact",
+          "internet"
+        ],
+        "expected": "inter"
+      },
+      {
+        "function": "common_prefix",
+        "args": [
+          "x",
+          ""
+        ],
+        "expected": ""
+      },
+      {
+        "function": "common_prefix",
+        "args": [
+          "mirror",
+          "mint"
+        ],
+        "expected": "mi"
+      },
+      {
+        "function": "common_prefix",
+        "args": [
+          "abc",
+          "abc"
+        ],
+        "expected": "abc"
+      }
+    ]
+  },
+  {
+    "id": "fh_short_circuit",
+    "category": "Code explanation",
+    "kind": "json",
+    "prompt": "Explain this Python code. Return only a JSON object with exactly keys output and reason. Use the reason tag specified in the question. Use reason tag and_short_circuit.\n\nhits = []\ndef tap():\n    hits.append(1)\n    return True\nprint([False and tap(), len(hits)])",
+    "reference": "{\"output\":[false,0],\"reason\":\"and_short_circuit\"}",
+    "expected": {
+      "output": [
+        false,
+        0
+      ],
+      "reason": "and_short_circuit"
+    }
+  },
+  {
+    "id": "fh_dict_update_order",
+    "category": "Code explanation",
+    "kind": "json",
+    "prompt": "Explain this Python code. Return only a JSON object with exactly keys output and reason. Use the reason tag specified in the question. Use reason tag existing_key_keeps_position.\n\nbook = {'red': 1, 'blue': 2}\nbook['red'] = 5\nprint(list(book.items()))",
+    "reference": "{\"output\":[[\"red\",5],[\"blue\",2]],\"reason\":\"existing_key_keeps_position\"}",
+    "expected": {
+      "output": [
+        [
+          "red",
+          5
+        ],
+        [
+          "blue",
+          2
+        ]
+      ],
+      "reason": "existing_key_keeps_position"
+    }
+  },
+  {
+    "id": "fh_negative_floor",
+    "category": "Code explanation",
+    "kind": "json",
+    "prompt": "Explain this Python code. Return only a JSON object with exactly keys output and reason. Use the reason tag specified in the question. Use reason tag floor_division_rounds_down.\n\nprint(-11 // 4)",
+    "reference": "{\"output\":-3,\"reason\":\"floor_division_rounds_down\"}",
+    "expected": {
+      "output": -3,
+      "reason": "floor_division_rounds_down"
+    }
+  },
+  {
+    "id": "fh_finally_return",
+    "category": "Code explanation",
+    "kind": "json",
+    "prompt": "Explain this Python code. Return only a JSON object with exactly keys output and reason. Use the reason tag specified in the question. Use reason tag finally_return_wins.\n\ndef value():\n    try:\n        return 3\n    finally:\n        return 8\nprint(value())",
+    "reference": "{\"output\":8,\"reason\":\"finally_return_wins\"}",
+    "expected": {
+      "output": 8,
+      "reason": "finally_return_wins"
+    }
+  },
+  {
+    "id": "fh_patch_perimeter",
+    "category": "Patch generation",
+    "kind": "patch",
+    "prompt": "Produce only a unified diff for geometry.py, with headers --- a/geometry.py and +++ b/geometry.py. Correct perimeter(width, height) for a rectangle. Keep unrelated behavior. Current file:\n\ndef area(width, height):\n    return width * height\n\ndef perimeter(width, height):\n    return width * height",
+    "reference": "--- a/geometry.py\n+++ b/geometry.py\n@@ -2,4 +2,4 @@\n     return width * height\n \n def perimeter(width, height):\n-    return width * height\n+    return 2 * (width + height)\n",
+    "path": "geometry.py",
+    "source": "def area(width, height):\n    return width * height\n\ndef perimeter(width, height):\n    return width * height\n",
+    "cases": [
+      {
+        "function": "area",
+        "args": [
+          3,
+          4
+        ],
+        "expected": 12
+      },
+      {
+        "function": "perimeter",
+        "args": [
+          3,
+          4
+        ],
+        "expected": 14
+      },
+      {
+        "function": "perimeter",
+        "args": [
+          0,
+          5
+        ],
+        "expected": 10
+      }
+    ]
+  },
+  {
+    "id": "fh_patch_product_range",
+    "category": "Patch generation",
+    "kind": "patch",
+    "prompt": "Produce only a unified diff for series.py, with headers --- a/series.py and +++ b/series.py. Make product_range include stop; if start is greater than stop, return the multiplicative identity. Keep unrelated behavior. Current file:\n\ndef identity(value):\n    return value\n\ndef product_range(start, stop):\n    result = 1\n    for value in range(start, stop):\n        result *= value\n    return result",
+    "reference": "--- a/series.py\n+++ b/series.py\n@@ -3,6 +3,6 @@\n \n def product_range(start, stop):\n     result = 1\n-    for value in range(start, stop):\n+    for value in range(start, stop + 1):\n         result *= value\n     return result\n",
+    "path": "series.py",
+    "source": "def identity(value):\n    return value\n\ndef product_range(start, stop):\n    result = 1\n    for value in range(start, stop):\n        result *= value\n    return result\n",
+    "cases": [
+      {
+        "function": "identity",
+        "args": [
+          17
+        ],
+        "expected": 17
+      },
+      {
+        "function": "product_range",
+        "args": [
+          2,
+          4
+        ],
+        "expected": 24
+      },
+      {
+        "function": "product_range",
+        "args": [
+          5,
+          5
+        ],
+        "expected": 5
+      },
+      {
+        "function": "product_range",
+        "args": [
+          4,
+          3
+        ],
+        "expected": 1
+      }
+    ]
+  },
+  {
+    "id": "fh_patch_rgb_hex",
+    "category": "Patch generation",
+    "kind": "patch",
+    "prompt": "Produce only a unified diff for palette.py, with headers --- a/palette.py and +++ b/palette.py. Format each RGB component as exactly two lowercase hexadecimal digits. Keep unrelated behavior. Current file:\n\ndef channel_name():\n    return 'RGB'\n\ndef rgb_hex(red, green, blue):\n    return '#' + hex(red)[2:] + hex(green)[2:] + hex(blue)[2:]",
+    "reference": "--- a/palette.py\n+++ b/palette.py\n@@ -2,4 +2,4 @@\n     return 'RGB'\n \n def rgb_hex(red, green, blue):\n-    return '#' + hex(red)[2:] + hex(green)[2:] + hex(blue)[2:]\n+    return f'#{red:02x}{green:02x}{blue:02x}'\n",
+    "path": "palette.py",
+    "source": "def channel_name():\n    return 'RGB'\n\ndef rgb_hex(red, green, blue):\n    return '#' + hex(red)[2:] + hex(green)[2:] + hex(blue)[2:]\n",
+    "cases": [
+      {
+        "function": "channel_name",
+        "args": [],
+        "expected": "RGB"
+      },
+      {
+        "function": "rgb_hex",
+        "args": [
+          0,
+          15,
+          255
+        ],
+        "expected": "#000fff"
+      },
+      {
+        "function": "rgb_hex",
+        "args": [
+          16,
+          32,
+          48
+        ],
+        "expected": "#102030"
+      }
+    ]
+  },
+  {
+    "id": "fh_patch_swap_pairs",
+    "category": "Patch generation",
+    "kind": "patch",
+    "prompt": "Produce only a unified diff for pairs.py, with headers --- a/pairs.py and +++ b/pairs.py. Make swap_pairs reverse the two members of each pair without changing pair_count. Keep unrelated behavior. Current file:\n\ndef pair_count(pairs):\n    return len(pairs)\n\ndef swap_pairs(pairs):\n    return [(left, right) for left, right in pairs]",
+    "reference": "--- a/pairs.py\n+++ b/pairs.py\n@@ -2,4 +2,4 @@\n     return len(pairs)\n \n def swap_pairs(pairs):\n-    return [(left, right) for left, right in pairs]\n+    return [[right, left] for left, right in pairs]\n",
+    "path": "pairs.py",
+    "source": "def pair_count(pairs):\n    return len(pairs)\n\ndef swap_pairs(pairs):\n    return [(left, right) for left, right in pairs]\n",
+    "cases": [
+      {
+        "function": "pair_count",
+        "args": [
+          [
+            [
+              1,
+              7
+            ],
+            [
+              2,
+              8
+            ]
+          ]
+        ],
+        "expected": 2
+      },
+      {
+        "function": "swap_pairs",
+        "args": [
+          [
+            [
+              1,
+              7
+            ],
+            [
+              2,
+              8
+            ]
+          ]
+        ],
+        "expected": [
+          [
+            7,
+            1
+          ],
+          [
+            8,
+            2
+          ]
+        ]
+      },
+      {
+        "function": "swap_pairs",
+        "args": [
+          []
+        ],
+        "expected": []
+      }
+    ]
+  },
+  {
+    "id": "fh_debug_radius",
+    "category": "Multi-step debugging",
+    "kind": "python",
+    "prompt": "Fix both functions: squared_distance computes squared Cartesian distance, and within_radius includes points exactly on the nonnegative radius boundary. Return only Python function definitions, with no imports or example calls.\n\ndef squared_distance(x1, y1, x2, y2):\n    return (x2 - x1) + (y2 - y1)\n\ndef within_radius(x1, y1, x2, y2, radius):\n    return squared_distance(x1, y1, x2, y2) < radius",
+    "reference": "def squared_distance(x1, y1, x2, y2):\n    return (x2 - x1) ** 2 + (y2 - y1) ** 2\n\ndef within_radius(x1, y1, x2, y2, radius):\n    return squared_distance(x1, y1, x2, y2) <= radius ** 2",
+    "cases": [
+      {
+        "function": "squared_distance",
+        "args": [
+          0,
+          0,
+          3,
+          4
+        ],
+        "expected": 25
+      },
+      {
+        "function": "within_radius",
+        "args": [
+          0,
+          0,
+          3,
+          4,
+          5
+        ],
+        "expected": true
+      },
+      {
+        "function": "within_radius",
+        "args": [
+          0,
+          0,
+          3,
+          4,
+          4
+        ],
+        "expected": false
+      },
+      {
+        "function": "squared_distance",
+        "args": [
+          2,
+          3,
+          2,
+          3
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "fh_debug_median",
+    "category": "Multi-step debugging",
+    "kind": "python",
+    "prompt": "Fix both functions: ordered_prices returns ascending order without changing input, and median_price returns the middle value or mean of two middles; empty input returns None. Return only Python function definitions, with no imports or example calls.\n\ndef ordered_prices(values):\n    return sorted(values, reverse=True)\n\ndef median_price(values):\n    ordered = ordered_prices(values)\n    return ordered[len(ordered) // 2]",
+    "reference": "def ordered_prices(values):\n    return sorted(values)\n\ndef median_price(values):\n    ordered = ordered_prices(values)\n    count = len(ordered)\n    if count == 0:\n        return None\n    middle = count // 2\n    if count % 2 == 0:\n        return (ordered[middle - 1] + ordered[middle]) / 2\n    return ordered[middle]",
+    "cases": [
+      {
+        "function": "ordered_prices",
+        "args": [
+          [
+            9,
+            1,
+            7,
+            3
+          ]
+        ],
+        "expected": [
+          1,
+          3,
+          7,
+          9
+        ],
+        "unchanged_args": true
+      },
+      {
+        "function": "median_price",
+        "args": [
+          [
+            9,
+            1,
+            7,
+            3
+          ]
+        ],
+        "expected": 5.0,
+        "unchanged_args": true
+      },
+      {
+        "function": "median_price",
+        "args": [
+          [
+            5,
+            1,
+            3
+          ]
+        ],
+        "expected": 3,
+        "unchanged_args": true
+      },
+      {
+        "function": "median_price",
+        "args": [
+          []
+        ],
+        "expected": null
+      }
+    ]
+  },
+  {
+    "id": "fh_debug_table",
+    "category": "Multi-step debugging",
+    "kind": "python",
+    "prompt": "Fix both functions: pad_cell right-pads short text to width without truncating long text; render_row joins padded cells with a vertical bar. Return only Python function definitions, with no imports or example calls.\n\ndef pad_cell(text, width):\n    return text[:width]\n\ndef render_row(cells, width):\n    return ''.join(cells)",
+    "reference": "def pad_cell(text, width):\n    return text + ' ' * max(0, width - len(text))\n\ndef render_row(cells, width):\n    return '|'.join(pad_cell(cell, width) for cell in cells)",
+    "cases": [
+      {
+        "function": "pad_cell",
+        "args": [
+          "A",
+          3
+        ],
+        "expected": "A  "
+      },
+      {
+        "function": "pad_cell",
+        "args": [
+          "hello",
+          3
+        ],
+        "expected": "hello"
+      },
+      {
+        "function": "render_row",
+        "args": [
+          [
+            "A",
+            "BC"
+          ],
+          3
+        ],
+        "expected": "A  |BC "
+      },
+      {
+        "function": "render_row",
+        "args": [
+          [],
+          2
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  {
+    "id": "fh_debug_checksum",
+    "category": "Multi-step debugging",
+    "kind": "python",
+    "prompt": "Fix both functions: checksum_xor folds integer values with bitwise XOR starting at zero; verify_checksum compares that checksum with expected. Return only Python function definitions, with no imports or example calls.\n\ndef checksum_xor(values):\n    result = 0\n    for value in values:\n        result += value\n    return result\n\ndef verify_checksum(values, expected):\n    return checksum_xor(values) != expected",
+    "reference": "def checksum_xor(values):\n    result = 0\n    for value in values:\n        result ^= value\n    return result\n\ndef verify_checksum(values, expected):\n    return checksum_xor(values) == expected",
+    "cases": [
+      {
+        "function": "checksum_xor",
+        "args": [
+          [
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": 0
+      },
+      {
+        "function": "verify_checksum",
+        "args": [
+          [
+            5,
+            7
+          ],
+          2
+        ],
+        "expected": true
+      },
+      {
+        "function": "verify_checksum",
+        "args": [
+          [
+            5,
+            7
+          ],
+          12
+        ],
+        "expected": false
+      },
+      {
+        "function": "verify_checksum",
+        "args": [
+          [],
+          0
+        ],
+        "expected": true
+      }
+    ]
+  },
+  {
+    "id": "fh_tool_queue",
+    "category": "Tool-call formatting",
+    "kind": "tool_call",
+    "prompt": "Mock tool protocol: reply with exactly one minified JSON object, no Markdown or extra text. Use tool queue_job with arguments.job as a string and arguments.priority as an integer. Queue job lint at priority 2.",
+    "reference": "{\"tool\":\"queue_job\",\"arguments\":{\"job\":\"lint\",\"priority\":2}}",
+    "expected": {
+      "tool": "queue_job",
+      "arguments": {
+        "job": "lint",
+        "priority": 2
+      }
+    }
+  },
+  {
+    "id": "fh_tool_metric",
+    "category": "Tool-call formatting",
+    "kind": "tool_call",
+    "prompt": "Mock tool protocol: reply with exactly one minified JSON object, no Markdown or extra text. Use tool record_metric with arguments.name, arguments.value, and arguments.unit. Record latency_ms as value 37 with unit ms.",
+    "reference": "{\"tool\":\"record_metric\",\"arguments\":{\"name\":\"latency_ms\",\"value\":37,\"unit\":\"ms\"}}",
+    "expected": {
+      "tool": "record_metric",
+      "arguments": {
+        "name": "latency_ms",
+        "value": 37,
+        "unit": "ms"
+      }
+    }
+  },
+  {
+    "id": "fh_tool_event",
+    "category": "Tool-call formatting",
+    "kind": "tool_call",
+    "prompt": "Mock tool protocol: reply with exactly one minified JSON object, no Markdown or extra text. Use tool dispatch_event with arguments.topic and arguments.tags (an array of strings). Dispatch build with tags ci and nightly in that order.",
+    "reference": "{\"tool\":\"dispatch_event\",\"arguments\":{\"topic\":\"build\",\"tags\":[\"ci\",\"nightly\"]}}",
+    "expected": {
+      "tool": "dispatch_event",
+      "arguments": {
+        "topic": "build",
+        "tags": [
+          "ci",
+          "nightly"
+        ]
+      }
+    }
+  },
+  {
+    "id": "fh_tool_compare",
+    "category": "Tool-call formatting",
+    "kind": "tool_call",
+    "prompt": "Mock tool protocol: reply with exactly one minified JSON object, no Markdown or extra text. Use tool compare_text with arguments.left, arguments.right, and arguments.mode. Compare text abc with abd in chars mode.",
+    "reference": "{\"tool\":\"compare_text\",\"arguments\":{\"left\":\"abc\",\"right\":\"abd\",\"mode\":\"chars\"}}",
+    "expected": {
+      "tool": "compare_text",
+      "arguments": {
+        "left": "abc",
+        "right": "abd",
+        "mode": "chars"
+      }
+    }
+  },
+  {
+    "id": "fh_tdd_extension",
+    "category": "Test-driven fixing",
+    "kind": "python",
+    "prompt": "Read these tests first: strip_extension('archive.tar.gz') -> 'archive.tar'; strip_extension('.env') -> '.env'; strip_extension('plain') -> 'plain'; strip_extension('x.') -> 'x'. Fix the implementation. Return only Python function definitions, with no imports or example calls.\n\ndef strip_extension(filename):\n    return filename.split('.')[0]",
+    "reference": "def strip_extension(filename):\n    position = filename.rfind('.')\n    return filename[:position] if position > 0 else filename",
+    "cases": [
+      {
+        "function": "strip_extension",
+        "args": [
+          "archive.tar.gz"
+        ],
+        "expected": "archive.tar"
+      },
+      {
+        "function": "strip_extension",
+        "args": [
+          ".env"
+        ],
+        "expected": ".env"
+      },
+      {
+        "function": "strip_extension",
+        "args": [
+          "plain"
+        ],
+        "expected": "plain"
+      },
+      {
+        "function": "strip_extension",
+        "args": [
+          "x."
+        ],
+        "expected": "x"
+      }
+    ]
+  },
+  {
+    "id": "fh_tdd_pair_diffs",
+    "category": "Test-driven fixing",
+    "kind": "python",
+    "prompt": "Read these tests first: pairwise_differences([4,9,3]) -> [5,-6]; a one-item or empty input returns []. Fix the implementation. Return only Python function definitions, with no imports or example calls.\n\ndef pairwise_differences(values):\n    return [values[index] - values[index + 1] for index in range(len(values) - 1)]",
+    "reference": "def pairwise_differences(values):\n    return [values[index + 1] - values[index] for index in range(len(values) - 1)]",
+    "cases": [
+      {
+        "function": "pairwise_differences",
+        "args": [
+          [
+            4,
+            9,
+            3
+          ]
+        ],
+        "expected": [
+          5,
+          -6
+        ]
+      },
+      {
+        "function": "pairwise_differences",
+        "args": [
+          [
+            7
+          ]
+        ],
+        "expected": []
+      },
+      {
+        "function": "pairwise_differences",
+        "args": [
+          []
+        ],
+        "expected": []
+      }
+    ]
+  },
+  {
+    "id": "fh_tdd_flatten",
+    "category": "Test-driven fixing",
+    "kind": "python",
+    "prompt": "Read these tests first: flatten_once([[1,2],[],[3]]) -> [1,2,3]; flatten_once([]) -> []; flatten_once([[4]]) -> [4]. Only one nesting level is required. Fix the implementation. Return only Python function definitions, with no imports or example calls.\n\ndef flatten_once(groups):\n    return groups[0]",
+    "reference": "def flatten_once(groups):\n    return [item for group in groups for item in group]",
+    "cases": [
+      {
+        "function": "flatten_once",
+        "args": [
+          [
+            [
+              1,
+              2
+            ],
+            [],
+            [
+              3
+            ]
+          ]
+        ],
+        "expected": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "function": "flatten_once",
+        "args": [
+          []
+        ],
+        "expected": []
+      },
+      {
+        "function": "flatten_once",
+        "args": [
+          [
+            [
+              4
+            ]
+          ]
+        ],
+        "expected": [
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fh_tdd_round_multiple",
+    "category": "Test-driven fixing",
+    "kind": "python",
+    "prompt": "Read these tests first: round_up_multiple(13,5) -> 15; (10,5) -> 10; (0,4) -> 0; (1,8) -> 8. Inputs are nonnegative and step is positive. Fix the implementation. Return only Python function definitions, with no imports or example calls.\n\ndef round_up_multiple(value, step):\n    return (value // step) * step",
+    "reference": "def round_up_multiple(value, step):\n    return ((value + step - 1) // step) * step",
+    "cases": [
+      {
+        "function": "round_up_multiple",
+        "args": [
+          13,
+          5
+        ],
+        "expected": 15
+      },
+      {
+        "function": "round_up_multiple",
+        "args": [
+          10,
+          5
+        ],
+        "expected": 10
+      },
+      {
+        "function": "round_up_multiple",
+        "args": [
+          0,
+          4
+        ],
+        "expected": 0
+      },
+      {
+        "function": "round_up_multiple",
+        "args": [
+          1,
+          8
+        ],
+        "expected": 8
+      }
+    ]
+  },
+  {
+    "id": "fh_repo_import_binding",
+    "category": "Small repository reasoning",
+    "kind": "json",
+    "prompt": "Virtual repository files:\nlimits.py:\nLIMIT = 4\nconsumer.py:\nfrom limits import LIMIT\ndef current():\n    return LIMIT\napp.py:\nimport limits\nfrom consumer import current\nlimits.LIMIT = 9\nprint(current())\n\nWhat does app.py print, and why? Answer schema: output is an integer; reason is one tag: imported_name_is_bound. Return only a JSON object with exactly the keys shown in the requested answer schema.",
+    "reference": "{\"output\":4,\"reason\":\"imported_name_is_bound\"}",
+    "expected": {
+      "output": 4,
+      "reason": "imported_name_is_bound"
+    },
+    "files": {
+      "limits.py": "LIMIT = 4\n",
+      "consumer.py": "from limits import LIMIT\ndef current():\n    return LIMIT\n",
+      "app.py": "import limits\nfrom consumer import current\nlimits.LIMIT = 9\nprint(current())\n"
+    },
+    "entry": "app.py"
+  },
+  {
+    "id": "fh_repo_registration",
+    "category": "Small repository reasoning",
+    "kind": "json",
+    "prompt": "Virtual repository files:\nregistry.py:\nHANDLERS = {}\ndef add(name, handler):\n    HANDLERS[name] = handler\nplugins.py:\nfrom registry import add\nadd('pdf', 'read_pdf')\nadd('csv', 'read_csv')\napp.py:\nimport plugins\nfrom registry import HANDLERS\nprint(','.join(sorted(HANDLERS)))\n\nWhat does app.py print after importing plugins? Answer schema: output is a string; reason is registration_side_effect. Return only a JSON object with exactly the keys shown in the requested answer schema.",
+    "reference": "{\"output\":\"csv,pdf\",\"reason\":\"registration_side_effect\"}",
+    "expected": {
+      "output": "csv,pdf",
+      "reason": "registration_side_effect"
+    },
+    "files": {
+      "registry.py": "HANDLERS = {}\ndef add(name, handler):\n    HANDLERS[name] = handler\n",
+      "plugins.py": "from registry import add\nadd('pdf', 'read_pdf')\nadd('csv', 'read_csv')\n",
+      "app.py": "import plugins\nfrom registry import HANDLERS\nprint(','.join(sorted(HANDLERS)))\n"
+    },
+    "entry": "app.py"
+  },
+  {
+    "id": "fh_repo_exception_handler",
+    "category": "Small repository reasoning",
+    "kind": "json",
+    "prompt": "Virtual repository files:\nstorage.py:\ndef fetch():\n    raise KeyError('missing')\nservice.py:\nfrom storage import fetch\ndef load():\n    try:\n        return fetch()\n    except KeyError:\n        return 'fallback'\napp.py:\nfrom service import load\nprint(load())\n\nWhat does app.py print, and in which file is the exception handled? Answer schema: output is a string; handler_file is a file name. Return only a JSON object with exactly the keys shown in the requested answer schema.",
+    "reference": "{\"output\":\"fallback\",\"handler_file\":\"service.py\"}",
+    "expected": {
+      "output": "fallback",
+      "handler_file": "service.py"
+    },
+    "files": {
+      "storage.py": "def fetch():\n    raise KeyError('missing')\n",
+      "service.py": "from storage import fetch\ndef load():\n    try:\n        return fetch()\n    except KeyError:\n        return 'fallback'\n",
+      "app.py": "from service import load\nprint(load())\n"
+    },
+    "entry": "app.py"
+  },
+  {
+    "id": "fh_repo_shadowed_import",
+    "category": "Small repository reasoning",
+    "kind": "json",
+    "prompt": "Virtual repository files:\nops.py:\ndef convert(value):\n    return value * 10\napp.py:\nfrom ops import convert\ndef convert(value):\n    return value + 2\nprint(convert(5))\n\nWhat does app.py print, and why? Answer schema: output is an integer; reason is local_definition_shadows_import. Return only a JSON object with exactly the keys shown in the requested answer schema.",
+    "reference": "{\"output\":7,\"reason\":\"local_definition_shadows_import\"}",
+    "expected": {
+      "output": 7,
+      "reason": "local_definition_shadows_import"
+    },
+    "files": {
+      "ops.py": "def convert(value):\n    return value * 10\n",
+      "app.py": "from ops import convert\ndef convert(value):\n    return value + 2\nprint(convert(5))\n"
+    },
+    "entry": "app.py"
+  }
+]
