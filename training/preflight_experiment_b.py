@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check frozen inputs, Experiment B data/config, and Lightning readiness."""
+"""Check frozen inputs, Experiment B data/config, and T4 host readiness."""
 
 import argparse
 import importlib.metadata
@@ -14,8 +14,13 @@ CONFIG = HERE / "config_experiment_b.json"
 TRAIN = ROOT / "dataset/experiment_b_train.jsonl"
 VALIDATION = ROOT / "dataset/experiment_b_validation.jsonl"
 OUTPUT = HERE / "output/experiment_b"
+STAGE6_RUN_ID = "20260926T095444Z-1dd18233"
+STAGE6_RUN_PATH = Path("results/tuned") / STAGE6_RUN_ID
+STAGE6_RECORD_PATH = Path("results/stage6_experiment_a_record.json")
 EXPECTED_FAILURES = {"simple_dedupe", "bug_last_index", "explain_slice",
                      "patch_slug", "repo_call_chain"}
+EXPECTED_IMPROVED = {"bug_count_words", "explain_mutation", "patch_clamp",
+                     "debug_inventory", "debug_parse_average", "tdd_palindrome"}
 EXPECTED_LORA = {"rank": 16, "alpha": 32, "dropout": 0.05,
                  "target_modules": "all-linear", "bias": "none"}
 EXPECTED_TRAINING = {"epochs": 1, "learning_rate": 0.0001,
@@ -28,23 +33,68 @@ def read_json(path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def latest_stage6():
-    root = ROOT / "results/tuned"
-    runs = sorted((path for path in root.iterdir() if path.is_dir() and
-                   (path / "summary.json").is_file()), reverse=True)
-    if not runs:
-        raise ValueError("no completed Stage 6 tuned run found")
-    run = runs[0]
+def validate_stage6_run(run):
+    """Prefer the original Lightning run when it is present locally."""
     summary = read_json(run / "summary.json")
     status = read_json(run / "run_status.json")
     run_config = read_json(run / "run_config.json")
     failed = {item["id"] for item in summary["tasks"] if not item["passed"]}
     if (status.get("status") != "complete" or summary.get("task_count") != 16 or
-            summary.get("passed") != 11 or failed != EXPECTED_FAILURES or
+            summary.get("passed") != 11 or len(summary["tasks"]) != 16 or
+            len({item["id"] for item in summary["tasks"]}) != 16 or
+            failed != EXPECTED_FAILURES or
             run_config.get("tasks_sha256") != EXPECTED_HASHES["benchmark/tasks.json"] or
             run_config.get("baseline_runner_sha256") != EXPECTED_HASHES["benchmark/run_baseline.py"]):
-        raise ValueError("latest Stage 6 run does not match the reported 11/16 result")
-    return run
+        raise ValueError("original Stage 6 run does not match the reported 11/16 result")
+
+
+def validate_stage6_record(path):
+    """Accept only the precise user-verified summary, never substitute raw artifacts."""
+    record = read_json(path)
+    expected_keys = {"stage", "run_id", "original_run_path", "baseline",
+                     "experiment_a", "improved_tasks", "regressed_tasks",
+                     "remaining_failed_tasks", "evaluation",
+                     "raw_lightning_artifacts_preserved_in_git", "artifact_note"}
+    def exact_score(value, passed):
+        return (isinstance(value, dict) and set(value) == {"passed", "total"} and
+                type(value["passed"]) is int and value["passed"] == passed and
+                type(value["total"]) is int and value["total"] == 16)
+
+    def exact_task_set(value, expected):
+        return (isinstance(value, list) and all(isinstance(item, str) for item in value)
+                and len(value) == len(expected) and set(value) == expected)
+
+    evaluation = record.get("evaluation", {}) if isinstance(record, dict) else {}
+    if (not isinstance(record, dict) or set(record) != expected_keys or
+            type(record["stage"]) is not int or record["stage"] != 6 or
+            record["run_id"] != STAGE6_RUN_ID or
+            record["original_run_path"] != STAGE6_RUN_PATH.as_posix() or
+            not exact_score(record["baseline"], 6) or
+            not exact_score(record["experiment_a"], 11) or
+            not exact_task_set(record["improved_tasks"], EXPECTED_IMPROVED) or
+            record["regressed_tasks"] != ["explain_slice"] or
+            not exact_task_set(record["remaining_failed_tasks"], EXPECTED_FAILURES) or
+            not isinstance(evaluation, dict) or
+            set(evaluation) != {"same_frozen_prompts_and_validators", "temperature",
+                                "generation_limit_tokens", "seed"} or
+            evaluation["same_frozen_prompts_and_validators"] is not True or
+            type(evaluation["temperature"]) is not int or evaluation["temperature"] != 0 or
+            type(evaluation["generation_limit_tokens"]) is not int or
+            evaluation["generation_limit_tokens"] != 512 or
+            type(evaluation["seed"]) is not int or evaluation["seed"] != 42 or
+            record["raw_lightning_artifacts_preserved_in_git"] is not False or
+            record["artifact_note"] != "Raw Lightning Stage 6 artifacts were not preserved in Git."):
+        raise ValueError("Stage 6 provenance record differs from the verified summary")
+
+
+def stage6_evidence():
+    run = ROOT / STAGE6_RUN_PATH
+    if run.exists():
+        validate_stage6_run(run)  # An invalid original run cannot be bypassed by metadata.
+        return "run_directory", run
+    record = ROOT / STAGE6_RECORD_PATH
+    validate_stage6_record(record)
+    return "provenance_record", record
 
 
 def check(local=False):
@@ -81,13 +131,14 @@ def check(local=False):
             errors.append("Experiment B dataset validation stats are stale or invalid")
     except (OSError, ValueError, KeyError, json.JSONDecodeError) as error:
         errors.append(f"Experiment B config/data check failed: {type(error).__name__}: {error}")
+    stage6_source = None
+    stage6_path = None
+    try:
+        stage6_source, stage6_path = stage6_evidence()
+    except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as error:
+        errors.append(f"Stage 6 result check failed: {type(error).__name__}: {error}")
     static_passed = not errors
-    stage6_run = None
     if not local:
-        try:
-            stage6_run = latest_stage6()
-        except (OSError, ValueError, KeyError, json.JSONDecodeError) as error:
-            errors.append(f"Stage 6 result check failed: {error}")
         try:
             report = read_json(HERE / "dry_run_experiment_b.json")
             if (report.get("chat_format_status") != "passed_all_examples" or
@@ -114,18 +165,20 @@ def check(local=False):
             else:
                 gpu = torch.cuda.get_device_properties(0)
                 if "T4" not in gpu.name or gpu.total_memory < 12 * 1024**3:
-                    errors.append(f"expected Lightning T4 with at least 12 GiB, found {gpu.name}")
+                    errors.append(f"expected T4 with at least 12 GiB, found {gpu.name}")
         except Exception as error:
             errors.append(f"PyTorch GPU check failed: {type(error).__name__}: {error}")
     return {"static_checks_passed": static_passed, "host_checks_performed": not local,
-            "stage6_run": str(stage6_run) if stage6_run else None,
+            "stage6_run": str(stage6_path) if stage6_source == "run_directory" else None,
+            "stage6_evidence_source": stage6_source,
+            "stage6_evidence_path": str(stage6_path) if stage6_path else None,
             "ready_for_training": not local and not errors, "errors": errors,
             "output_root": str(OUTPUT)}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--local", action="store_true", help="Skip Lightning-only checks")
+    parser.add_argument("--local", action="store_true", help="Skip tokenizer, package, and GPU host checks")
     args = parser.parse_args()
     report = check(local=args.local)
     print(json.dumps(report, indent=2))

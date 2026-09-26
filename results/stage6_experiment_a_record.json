@@ -1,0 +1,39 @@
+{
+  "stage": 6,
+  "run_id": "20260926T095444Z-1dd18233",
+  "original_run_path": "results/tuned/20260926T095444Z-1dd18233",
+  "baseline": {
+    "passed": 6,
+    "total": 16
+  },
+  "experiment_a": {
+    "passed": 11,
+    "total": 16
+  },
+  "improved_tasks": [
+    "bug_count_words",
+    "explain_mutation",
+    "patch_clamp",
+    "debug_inventory",
+    "debug_parse_average",
+    "tdd_palindrome"
+  ],
+  "regressed_tasks": [
+    "explain_slice"
+  ],
+  "remaining_failed_tasks": [
+    "simple_dedupe",
+    "bug_last_index",
+    "explain_slice",
+    "patch_slug",
+    "repo_call_chain"
+  ],
+  "evaluation": {
+    "same_frozen_prompts_and_validators": true,
+    "temperature": 0,
+    "generation_limit_tokens": 512,
+    "seed": 42
+  },
+  "raw_lightning_artifacts_preserved_in_git": false,
+  "artifact_note": "Raw Lightning Stage 6 artifacts were not preserved in Git."
+}
