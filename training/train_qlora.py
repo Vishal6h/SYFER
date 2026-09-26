@@ -131,7 +131,7 @@ def require_completed_dry_run():
             "validation split changed after dry run")
 
 
-def dry_run(config, train_messages, validation_messages, offline=True):
+def dry_run(config, train_messages, validation_messages, offline=False):
     report = report_paths(config, EXPECTED_TRAIN, EXPECTED_VALIDATION)
     report.update({"mode": "dry-run", "train_examples": len(train_messages),
                    "validation_examples": len(validation_messages), "full_model_loaded": False})
@@ -140,6 +140,7 @@ def dry_run(config, train_messages, validation_messages, offline=True):
         train_items = format_split(tokenizer, train_messages, config["max_sequence_length"])
         validation_items = format_split(tokenizer, validation_messages, config["max_sequence_length"])
         report.update({"tokenizer_status": "loaded_from_local_cache" if offline else "loaded_or_downloaded",
+                       "chat_template_available": bool(tokenizer.chat_template),
                        "chat_format_status": "passed_all_examples",
                        "max_train_tokens": max(len(item["input_ids"]) for item in train_items),
                        "max_validation_tokens": max(len(item["input_ids"]) for item in validation_items),
@@ -299,11 +300,11 @@ def main():
     modes.add_argument("--smoke-test", action="store_true", help="On a suitable cloud GPU, train one optimizer step")
     modes.add_argument("--train", action="store_true", help="On a suitable cloud GPU, run the configured experiment")
     parser.add_argument("--config", type=Path, default=HERE / "config.json")
-    parser.add_argument("--download-tokenizer", action="store_true",
-                        help="With --dry-run, allow download of the pinned tokenizer into the cloud cache")
+    parser.add_argument("--offline", action="store_true",
+                        help="With --dry-run, use only the project tokenizer cache")
     args = parser.parse_args()
-    if args.download_tokenizer and not args.dry_run:
-        parser.error("--download-tokenizer is only valid with --dry-run")
+    if args.offline and not args.dry_run:
+        parser.error("--offline is only valid with --dry-run")
     try:
         config = load_config(args.config)
         train_messages = load_messages(EXPECTED_TRAIN)
@@ -317,7 +318,7 @@ def main():
                               **report_paths(config, EXPECTED_TRAIN, EXPECTED_VALIDATION)}, indent=2))
             return 0
         if args.dry_run:
-            return dry_run(config, train_messages, validation_messages, offline=not args.download_tokenizer)
+            return dry_run(config, train_messages, validation_messages, offline=args.offline)
         require_completed_dry_run()
         return train(config, train_messages, validation_messages, smoke=args.smoke_test)
     except (ImportError, OSError, ValueError, KeyError, json.JSONDecodeError) as error:
