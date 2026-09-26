@@ -1,0 +1,1177 @@
+[
+  {
+    "id": "ddev_encode_runs",
+    "category": "Simple coding",
+    "response_mode": "python_code",
+    "prompt": "Write encode_runs(text): return a list of [character, run_length] lists for each consecutive run in text. Preserve case; empty text returns []. Return only raw Python function definitions, no imports, prose, or fences.",
+    "reference": "def encode_runs(text):\n    result = []\n    for char in text:\n        if result and result[-1][0] == char:\n            result[-1][1] += 1\n        else:\n            result.append([char, 1])\n    return result\n",
+    "cases": [
+      {
+        "function": "encode_runs",
+        "args": [
+          "aaabbc"
+        ],
+        "expected": [
+          [
+            "a",
+            3
+          ],
+          [
+            "b",
+            2
+          ],
+          [
+            "c",
+            1
+          ]
+        ]
+      },
+      {
+        "function": "encode_runs",
+        "args": [
+          ""
+        ],
+        "expected": []
+      },
+      {
+        "function": "encode_runs",
+        "args": [
+          "abBA"
+        ],
+        "expected": [
+          [
+            "a",
+            1
+          ],
+          [
+            "b",
+            1
+          ],
+          [
+            "B",
+            1
+          ],
+          [
+            "A",
+            1
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ddev_adjacent_gap",
+    "category": "Simple coding",
+    "response_mode": "python_code",
+    "prompt": "Write largest_adjacent_gap(values): return the largest absolute difference between neighboring integers in the input order, or 0 for fewer than two items. Do not sort or mutate the list. Return only raw Python function definitions, no imports, prose, or fences.",
+    "reference": "def largest_adjacent_gap(values):\n    return max((abs(values[i] - values[i - 1]) for i in range(1, len(values))), default=0)\n",
+    "cases": [
+      {
+        "function": "largest_adjacent_gap",
+        "args": [
+          [
+            3,
+            11,
+            4
+          ]
+        ],
+        "expected": 8,
+        "unchanged_args": true
+      },
+      {
+        "function": "largest_adjacent_gap",
+        "args": [
+          [
+            7
+          ]
+        ],
+        "expected": 0
+      },
+      {
+        "function": "largest_adjacent_gap",
+        "args": [
+          [
+            -3,
+            -9,
+            2
+          ]
+        ],
+        "expected": 11
+      }
+    ]
+  },
+  {
+    "id": "ddev_spreadsheet_label",
+    "category": "Simple coding",
+    "response_mode": "python_code",
+    "prompt": "Write spreadsheet_label(number) for a positive integer: use one-based spreadsheet columns A through Z, then AA, AB, and so on. Return a string. Return only raw Python function definitions, no imports, prose, or fences.",
+    "reference": "def spreadsheet_label(number):\n    result = ''\n    while number:\n        number -= 1\n        result = chr(ord('A') + number % 26) + result\n        number //= 26\n    return result\n",
+    "cases": [
+      {
+        "function": "spreadsheet_label",
+        "args": [
+          1
+        ],
+        "expected": "A"
+      },
+      {
+        "function": "spreadsheet_label",
+        "args": [
+          26
+        ],
+        "expected": "Z"
+      },
+      {
+        "function": "spreadsheet_label",
+        "args": [
+          27
+        ],
+        "expected": "AA"
+      },
+      {
+        "function": "spreadsheet_label",
+        "args": [
+          52
+        ],
+        "expected": "AZ"
+      },
+      {
+        "function": "spreadsheet_label",
+        "args": [
+          703
+        ],
+        "expected": "AAA"
+      }
+    ]
+  },
+  {
+    "id": "ddev_alternate_letters",
+    "category": "Simple coding",
+    "response_mode": "python_code",
+    "prompt": "Write alternate_letters(text): the first alphabetic character becomes lowercase, the next uppercase, and so on; nonletters remain unchanged and do not advance the alternation. Return a string. Return only raw Python function definitions, no imports, prose, or fences.",
+    "reference": "def alternate_letters(text):\n    result = []\n    count = 0\n    for char in text:\n        if char.isalpha():\n            result.append(char.lower() if count % 2 == 0 else char.upper())\n            count += 1\n        else:\n            result.append(char)\n    return ''.join(result)\n",
+    "cases": [
+      {
+        "function": "alternate_letters",
+        "args": [
+          "a-bC"
+        ],
+        "expected": "a-Bc"
+      },
+      {
+        "function": "alternate_letters",
+        "args": [
+          "X Y"
+        ],
+        "expected": "x Y"
+      },
+      {
+        "function": "alternate_letters",
+        "args": [
+          ""
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  {
+    "id": "ddev_power_of_two",
+    "category": "Bug fixing",
+    "response_mode": "python_code",
+    "prompt": "Fix is_power_of_two(number) for nonnegative integers: 1, 2, 4, 8, ... are powers of two; zero and other integers are not. Return only raw Python function definitions, no imports, prose, or fences.\n\nCurrent code:\ndef is_power_of_two(number):\n    return number % 2 == 0",
+    "reference": "def is_power_of_two(number):\n    return number > 0 and number & (number - 1) == 0\n",
+    "cases": [
+      {
+        "function": "is_power_of_two",
+        "args": [
+          1
+        ],
+        "expected": true
+      },
+      {
+        "function": "is_power_of_two",
+        "args": [
+          2
+        ],
+        "expected": true
+      },
+      {
+        "function": "is_power_of_two",
+        "args": [
+          3
+        ],
+        "expected": false
+      },
+      {
+        "function": "is_power_of_two",
+        "args": [
+          0
+        ],
+        "expected": false
+      },
+      {
+        "function": "is_power_of_two",
+        "args": [
+          16
+        ],
+        "expected": true
+      },
+      {
+        "function": "is_power_of_two",
+        "args": [
+          18
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "ddev_cycle_index",
+    "category": "Bug fixing",
+    "response_mode": "python_code",
+    "prompt": "Fix cycle_index(index, size) for a positive size: map any positive or negative integer index into 0..size-1 using wraparound. Return only raw Python function definitions, no imports, prose, or fences.\n\nCurrent code:\ndef cycle_index(index, size):\n    return index - size if index >= size else index",
+    "reference": "def cycle_index(index, size):\n    return index % size\n",
+    "cases": [
+      {
+        "function": "cycle_index",
+        "args": [
+          -1,
+          5
+        ],
+        "expected": 4
+      },
+      {
+        "function": "cycle_index",
+        "args": [
+          12,
+          5
+        ],
+        "expected": 2
+      },
+      {
+        "function": "cycle_index",
+        "args": [
+          3,
+          5
+        ],
+        "expected": 3
+      },
+      {
+        "function": "cycle_index",
+        "args": [
+          -12,
+          5
+        ],
+        "expected": 3
+      }
+    ]
+  },
+  {
+    "id": "ddev_first_colon",
+    "category": "Bug fixing",
+    "response_mode": "python_code",
+    "prompt": "Fix split_first_colon(text): return a two-element list [before, after] split at only the first colon. If there is no colon, after is empty. Return only raw Python function definitions, no imports, prose, or fences.\n\nCurrent code:\ndef split_first_colon(text):\n    return text.split(':')",
+    "reference": "def split_first_colon(text):\n    if ':' not in text:\n        return [text, '']\n    return text.split(':', 1)\n",
+    "cases": [
+      {
+        "function": "split_first_colon",
+        "args": [
+          "a:b:c"
+        ],
+        "expected": [
+          "a",
+          "b:c"
+        ]
+      },
+      {
+        "function": "split_first_colon",
+        "args": [
+          "plain"
+        ],
+        "expected": [
+          "plain",
+          ""
+        ]
+      },
+      {
+        "function": "split_first_colon",
+        "args": [
+          ":x"
+        ],
+        "expected": [
+          "",
+          "x"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ddev_triangle_rule",
+    "category": "Bug fixing",
+    "response_mode": "python_code",
+    "prompt": "Fix valid_triangle(a,b,c): return a boolean for strictly positive integer sides that form a nondegenerate triangle. Check every triangle inequality. Return only raw Python function definitions, no imports, prose, or fences.\n\nCurrent code:\ndef valid_triangle(a, b, c):\n    return a + b >= c",
+    "reference": "def valid_triangle(a, b, c):\n    return a > 0 and b > 0 and c > 0 and a + b > c and a + c > b and b + c > a\n",
+    "cases": [
+      {
+        "function": "valid_triangle",
+        "args": [
+          3,
+          4,
+          5
+        ],
+        "expected": true
+      },
+      {
+        "function": "valid_triangle",
+        "args": [
+          1,
+          1,
+          2
+        ],
+        "expected": false
+      },
+      {
+        "function": "valid_triangle",
+        "args": [
+          0,
+          4,
+          4
+        ],
+        "expected": false
+      },
+      {
+        "function": "valid_triangle",
+        "args": [
+          5,
+          1,
+          1
+        ],
+        "expected": false
+      },
+      {
+        "function": "valid_triangle",
+        "args": [
+          2,
+          2,
+          3
+        ],
+        "expected": true
+      },
+      {
+        "function": "valid_triangle",
+        "args": [
+          10,
+          4,
+          7
+        ],
+        "expected": true
+      },
+      {
+        "function": "valid_triangle",
+        "args": [
+          10,
+          1,
+          1
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "ddev_closure_binding",
+    "category": "Code explanation",
+    "response_mode": "explanation_json",
+    "prompt": "Trace the following Python program. Return one bare JSON object with exactly output (array of three integers) and reason (string). reason must be the literal tag closure_reads_late_bound_name. Do not use prose or Markdown fences.\n\nfunctions = [lambda: index for index in range(3)]\nprint([function() for function in functions])",
+    "snippet": "functions = [lambda: index for index in range(3)]\nprint([function() for function in functions])",
+    "expected": {
+      "output": [
+        2,
+        2,
+        2
+      ],
+      "reason": "closure_reads_late_bound_name"
+    },
+    "reference": "{\"output\":[2,2,2],\"reason\":\"closure_reads_late_bound_name\"}"
+  },
+  {
+    "id": "ddev_live_dict_view",
+    "category": "Code explanation",
+    "response_mode": "explanation_json",
+    "prompt": "Trace the following Python program. Return one bare JSON object with exactly output (integer) and reason (string). reason must be the literal tag dictionary_view_reflects_updates. Do not use prose or Markdown fences.\n\nmapping = {'a': 1}\nkeys = mapping.keys()\nmapping['b'] = 2\nprint(len(keys))",
+    "snippet": "mapping = {'a': 1}\nkeys = mapping.keys()\nmapping['b'] = 2\nprint(len(keys))",
+    "expected": {
+      "output": 2,
+      "reason": "dictionary_view_reflects_updates"
+    },
+    "reference": "{\"output\":2,\"reason\":\"dictionary_view_reflects_updates\"}"
+  },
+  {
+    "id": "ddev_set_add_result",
+    "category": "Code explanation",
+    "response_mode": "explanation_json",
+    "prompt": "Trace the following Python program. Return one bare JSON object with exactly output (array of two integers) and reason (string). reason must be the literal tag set_add_returns_none. Do not use prose or Markdown fences.\n\nnumbers = {1}\nresult = numbers.add(2)\nprint([len(numbers), int(result is None)])",
+    "snippet": "numbers = {1}\nresult = numbers.add(2)\nprint([len(numbers), int(result is None)])",
+    "expected": {
+      "output": [
+        2,
+        1
+      ],
+      "reason": "set_add_returns_none"
+    },
+    "reference": "{\"output\":[2,1],\"reason\":\"set_add_returns_none\"}"
+  },
+  {
+    "id": "ddev_try_else",
+    "category": "Code explanation",
+    "response_mode": "explanation_json",
+    "prompt": "Trace the following Python program. Return one bare JSON object with exactly output (integer) and reason (string). reason must be the literal tag try_else_runs_without_exception. Do not use prose or Markdown fences.\n\ntry:\n    number = int('7')\nexcept ValueError:\n    number = 0\nelse:\n    number += 3\nprint(number)",
+    "snippet": "try:\n    number = int('7')\nexcept ValueError:\n    number = 0\nelse:\n    number += 3\nprint(number)",
+    "expected": {
+      "output": 10,
+      "reason": "try_else_runs_without_exception"
+    },
+    "reference": "{\"output\":10,\"reason\":\"try_else_runs_without_exception\"}"
+  },
+  {
+    "id": "ddev_patch_line_endings",
+    "category": "Patch generation",
+    "response_mode": "unified_diff",
+    "prompt": "Return only a raw unified diff for line_text.py. Use --- a/line_text.py and +++ b/line_text.py. Convert both CRLF and lone carriage returns to LF, without changing existing LF characters. Preserve the unrelated functions named prefix. Every context line, including a blank one, needs its leading space; hunk counts must be correct. No prose or Markdown fences.\n\nCurrent file:\ndef prefix(value):\n    return '>' + value\n\ndef normalize_lines(text):\n    return text.replace('\\r\\n', '\\n')\n",
+    "path": "line_text.py",
+    "source": "def prefix(value):\n    return '>' + value\n\ndef normalize_lines(text):\n    return text.replace('\\r\\n', '\\n')\n",
+    "preserve_functions": [
+      "prefix"
+    ],
+    "reference": "--- a/line_text.py\n+++ b/line_text.py\n@@ -3,3 +3,3 @@\n \n def normalize_lines(text):\n-    return text.replace('\\r\\n', '\\n')\n+    return text.replace('\\r\\n', '\\n').replace('\\r', '\\n')\n",
+    "cases": [
+      {
+        "function": "normalize_lines",
+        "args": [
+          "a\r\nb\rc"
+        ],
+        "expected": "a\nb\nc"
+      },
+      {
+        "function": "normalize_lines",
+        "args": [
+          "x\ny"
+        ],
+        "expected": "x\ny"
+      },
+      {
+        "function": "prefix",
+        "args": [
+          "ok"
+        ],
+        "expected": ">ok"
+      }
+    ]
+  },
+  {
+    "id": "ddev_patch_terminal_newline",
+    "category": "Patch generation",
+    "response_mode": "unified_diff",
+    "prompt": "Return only a raw unified diff for tail_text.py. Use --- a/tail_text.py and +++ b/tail_text.py. Remove exactly one final LF if present; retain spaces and any earlier LF. The source ends with an empty context line. Preserve the unrelated functions named identity. Every context line, including a blank one, needs its leading space; hunk counts must be correct. No prose or Markdown fences.\n\nCurrent file:\ndef identity(value):\n    return value\n\ndef drop_one_newline(text):\n    return text.rstrip()\n\n",
+    "path": "tail_text.py",
+    "source": "def identity(value):\n    return value\n\ndef drop_one_newline(text):\n    return text.rstrip()\n\n",
+    "preserve_functions": [
+      "identity"
+    ],
+    "reference": "--- a/tail_text.py\n+++ b/tail_text.py\n@@ -1,6 +1,6 @@\n def identity(value):\n     return value\n \n def drop_one_newline(text):\n-    return text.rstrip()\n+    return text[:-1] if text.endswith('\\n') else text\n \n",
+    "cases": [
+      {
+        "function": "drop_one_newline",
+        "args": [
+          "a  \n"
+        ],
+        "expected": "a  "
+      },
+      {
+        "function": "drop_one_newline",
+        "args": [
+          "a  "
+        ],
+        "expected": "a  "
+      },
+      {
+        "function": "drop_one_newline",
+        "args": [
+          "\n\n"
+        ],
+        "expected": "\n"
+      },
+      {
+        "function": "identity",
+        "args": [
+          3
+        ],
+        "expected": 3
+      }
+    ]
+  },
+  {
+    "id": "ddev_patch_weighted_products",
+    "category": "Patch generation",
+    "response_mode": "unified_diff",
+    "prompt": "Return only a raw unified diff for vectors.py. Use --- a/vectors.py and +++ b/vectors.py. Both dot_product and weighted_total must sum pairwise products, stopping at the shorter input. Keep identity unchanged. Preserve the unrelated functions named identity. Every context line, including a blank one, needs its leading space; hunk counts must be correct. No prose or Markdown fences.\n\nCurrent file:\ndef dot_product(left, right):\n    return sum(a + b for a, b in zip(left, right))\n\ndef identity(value):\n    return value\n\ndef weighted_total(values, weights):\n    return sum(value + weight for value, weight in zip(values, weights))\n",
+    "path": "vectors.py",
+    "source": "def dot_product(left, right):\n    return sum(a + b for a, b in zip(left, right))\n\ndef identity(value):\n    return value\n\ndef weighted_total(values, weights):\n    return sum(value + weight for value, weight in zip(values, weights))\n",
+    "preserve_functions": [
+      "identity"
+    ],
+    "reference": "--- a/vectors.py\n+++ b/vectors.py\n@@ -1,3 +1,3 @@\n def dot_product(left, right):\n-    return sum(a + b for a, b in zip(left, right))\n+    return sum(a * b for a, b in zip(left, right))\n \n@@ -7,2 +7,2 @@\n def weighted_total(values, weights):\n-    return sum(value + weight for value, weight in zip(values, weights))\n+    return sum(value * weight for value, weight in zip(values, weights))\n",
+    "cases": [
+      {
+        "function": "dot_product",
+        "args": [
+          [
+            2,
+            3
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        "expected": 23
+      },
+      {
+        "function": "dot_product",
+        "args": [
+          [
+            7
+          ],
+          [
+            2,
+            9
+          ]
+        ],
+        "expected": 14
+      },
+      {
+        "function": "weighted_total",
+        "args": [
+          [
+            1,
+            5
+          ],
+          [
+            10,
+            2
+          ]
+        ],
+        "expected": 20
+      },
+      {
+        "function": "identity",
+        "args": [
+          17
+        ],
+        "expected": 17
+      }
+    ]
+  },
+  {
+    "id": "ddev_patch_position_selector",
+    "category": "Patch generation",
+    "response_mode": "unified_diff",
+    "prompt": "Return only a raw unified diff for select.py. Use --- a/select.py and +++ b/select.py. Select source elements at the requested positions, in the requested order, retaining duplicate positions. Preserve the unrelated functions named count_values. Every context line, including a blank one, needs its leading space; hunk counts must be correct. No prose or Markdown fences.\n\nCurrent file:\ndef count_values(values):\n    return len(values)\n\ndef select_positions(values, positions):\n    selected = []\n    for index in range(len(positions)):\n        selected.append(values[index])\n    return selected\n",
+    "path": "select.py",
+    "source": "def count_values(values):\n    return len(values)\n\ndef select_positions(values, positions):\n    selected = []\n    for index in range(len(positions)):\n        selected.append(values[index])\n    return selected\n",
+    "preserve_functions": [
+      "count_values"
+    ],
+    "reference": "--- a/select.py\n+++ b/select.py\n@@ -4,5 +4,5 @@\n def select_positions(values, positions):\n     selected = []\n-    for index in range(len(positions)):\n-        selected.append(values[index])\n+    for position in positions:\n+        selected.append(values[position])\n     return selected\n",
+    "cases": [
+      {
+        "function": "select_positions",
+        "args": [
+          [
+            "a",
+            "b",
+            "c"
+          ],
+          [
+            2,
+            0
+          ]
+        ],
+        "expected": [
+          "c",
+          "a"
+        ]
+      },
+      {
+        "function": "select_positions",
+        "args": [
+          [
+            5,
+            6
+          ],
+          []
+        ],
+        "expected": []
+      },
+      {
+        "function": "select_positions",
+        "args": [
+          [
+            5,
+            6
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "expected": [
+          6,
+          6
+        ]
+      },
+      {
+        "function": "count_values",
+        "args": [
+          [
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": 3
+      }
+    ]
+  },
+  {
+    "id": "ddev_debug_coordinates",
+    "category": "Multi-step debugging",
+    "response_mode": "python_code",
+    "prompt": "Fix both functions. parse_coordinate(text) accepts two comma-separated signed integers and returns [x,y]; manhattan_from_origin(text) returns abs(x)+abs(y). Return only raw Python function definitions, no imports, prose, or fences.\n\nCurrent code:\ndef parse_coordinate(text):\n    x, y = text.split(',')\n    return [int(y), int(x)]\n\ndef manhattan_from_origin(text):\n    x, y = parse_coordinate(text)\n    return abs(x - y)",
+    "reference": "def parse_coordinate(text):\n    x, y = text.split(',')\n    return [int(x), int(y)]\n\ndef manhattan_from_origin(text):\n    x, y = parse_coordinate(text)\n    return abs(x) + abs(y)\n",
+    "cases": [
+      {
+        "function": "parse_coordinate",
+        "args": [
+          "-3, 8"
+        ],
+        "expected": [
+          -3,
+          8
+        ]
+      },
+      {
+        "function": "manhattan_from_origin",
+        "args": [
+          "-3, 8"
+        ],
+        "expected": 11
+      },
+      {
+        "function": "parse_coordinate",
+        "args": [
+          "0,-2"
+        ],
+        "expected": [
+          0,
+          -2
+        ]
+      },
+      {
+        "function": "manhattan_from_origin",
+        "args": [
+          "0,-2"
+        ],
+        "expected": 2
+      }
+    ]
+  },
+  {
+    "id": "ddev_debug_path_segments",
+    "category": "Multi-step debugging",
+    "response_mode": "python_code",
+    "prompt": "Fix both functions. clean_segments(path) returns a list of nonempty slash-separated segments, discarding '.' segments but leaving '..' literal. path_depth(path) is the count of cleaned segments. Return only raw Python function definitions, no imports, prose, or fences.\n\nCurrent code:\ndef clean_segments(path):\n    return path.split('/')\n\ndef path_depth(path):\n    return len(path.split('/'))",
+    "reference": "def clean_segments(path):\n    return [part for part in path.split('/') if part and part != '.']\n\ndef path_depth(path):\n    return len(clean_segments(path))\n",
+    "cases": [
+      {
+        "function": "clean_segments",
+        "args": [
+          "/a//./b/"
+        ],
+        "expected": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "function": "path_depth",
+        "args": [
+          "/a//./b/"
+        ],
+        "expected": 2
+      },
+      {
+        "function": "clean_segments",
+        "args": [
+          "../x"
+        ],
+        "expected": [
+          "..",
+          "x"
+        ]
+      },
+      {
+        "function": "path_depth",
+        "args": [
+          ""
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "ddev_debug_grades",
+    "category": "Multi-step debugging",
+    "response_mode": "python_code",
+    "prompt": "Fix both functions. grade_band(score) returns A for >=90, B for >=80, C for >=70, otherwise D. count_passing(scores) counts scores >=70. Return only raw Python function definitions, no imports, prose, or fences.\n\nCurrent code:\ndef grade_band(score):\n    if score > 90: return 'A'\n    if score > 80: return 'B'\n    if score > 70: return 'C'\n    return 'D'\n\ndef count_passing(scores):\n    return sum(score > 70 for score in scores)",
+    "reference": "def grade_band(score):\n    if score >= 90: return 'A'\n    if score >= 80: return 'B'\n    if score >= 70: return 'C'\n    return 'D'\n\ndef count_passing(scores):\n    return sum(score >= 70 for score in scores)\n",
+    "cases": [
+      {
+        "function": "grade_band",
+        "args": [
+          90
+        ],
+        "expected": "A"
+      },
+      {
+        "function": "grade_band",
+        "args": [
+          80
+        ],
+        "expected": "B"
+      },
+      {
+        "function": "grade_band",
+        "args": [
+          70
+        ],
+        "expected": "C"
+      },
+      {
+        "function": "grade_band",
+        "args": [
+          69
+        ],
+        "expected": "D"
+      },
+      {
+        "function": "count_passing",
+        "args": [
+          [
+            69,
+            70,
+            80,
+            90
+          ]
+        ],
+        "expected": 3
+      }
+    ]
+  },
+  {
+    "id": "ddev_debug_digit_product",
+    "category": "Multi-step debugging",
+    "response_mode": "python_code",
+    "prompt": "Fix both functions. digit_values(text) returns the decimal digit values found in text, in order, ignoring nondigits. digit_product(text) multiplies those values; the product of no digits is 1. Return only raw Python function definitions, no imports, prose, or fences.\n\nCurrent code:\ndef digit_values(text):\n    return [char for char in text if char.isdigit()]\n\ndef digit_product(text):\n    return sum(digit_values(text))",
+    "reference": "def digit_values(text):\n    return [int(char) for char in text if char.isdigit()]\n\ndef digit_product(text):\n    product = 1\n    for digit in digit_values(text):\n        product *= digit\n    return product\n",
+    "cases": [
+      {
+        "function": "digit_values",
+        "args": [
+          "a2-03"
+        ],
+        "expected": [
+          2,
+          0,
+          3
+        ]
+      },
+      {
+        "function": "digit_product",
+        "args": [
+          "a2-03"
+        ],
+        "expected": 0
+      },
+      {
+        "function": "digit_product",
+        "args": [
+          "2x3y4"
+        ],
+        "expected": 24
+      },
+      {
+        "function": "digit_product",
+        "args": [
+          "abc"
+        ],
+        "expected": 1
+      }
+    ]
+  },
+  {
+    "id": "ddev_tool_catalog_exact",
+    "category": "Tool-call formatting",
+    "response_mode": "tool_call_json",
+    "prompt": "Mock tools are catalog_lookup and catalog_search. Choose catalog_lookup for the exact package starlib, not a search query. Return one bare JSON object with exactly tool (string) and arguments (object); tool must be catalog_lookup. arguments must have exactly package (string) and version (null because none was requested). Use package starlib. No prose or Markdown fences; JSON whitespace and object-key order do not matter.",
+    "expected": {
+      "tool": "catalog_lookup",
+      "arguments": {
+        "package": "starlib",
+        "version": null
+      }
+    },
+    "reference": "{\"tool\":\"catalog_lookup\",\"arguments\":{\"package\":\"starlib\",\"version\":null}}"
+  },
+  {
+    "id": "ddev_tool_job_batch",
+    "category": "Tool-call formatting",
+    "response_mode": "tool_call_json",
+    "prompt": "Mock tools are schedule_jobs and cancel_jobs. Choose schedule_jobs. Return one bare JSON object with exactly tool (string) and arguments (object). arguments must have exactly jobs (array) and dry_run (boolean). jobs has two objects in order: name lint, priority 1; name typecheck, priority 2. Each job object has exactly name (string) and priority (integer). dry_run is true. No prose or fences; JSON whitespace and object-key order do not matter.",
+    "expected": {
+      "tool": "schedule_jobs",
+      "arguments": {
+        "jobs": [
+          {
+            "name": "lint",
+            "priority": 1
+          },
+          {
+            "name": "typecheck",
+            "priority": 2
+          }
+        ],
+        "dry_run": true
+      }
+    },
+    "reference": "{\"tool\":\"schedule_jobs\",\"arguments\":{\"jobs\":[{\"name\":\"lint\",\"priority\":1},{\"name\":\"typecheck\",\"priority\":2}],\"dry_run\":true}}"
+  },
+  {
+    "id": "ddev_tool_emit_metric",
+    "category": "Tool-call formatting",
+    "response_mode": "tool_call_json",
+    "prompt": "Mock tools are read_metric and emit_metric. Choose emit_metric to record a new value. Return one bare JSON object with exactly tool (string) and arguments (object). arguments must have exactly name (string), labels (object), and value (integer); omit optional unit entirely. Set name queue_depth, labels to exactly region: west and service: api (both strings), and value to 7. No prose or fences; JSON whitespace and object-key order do not matter.",
+    "expected": {
+      "tool": "emit_metric",
+      "arguments": {
+        "name": "queue_depth",
+        "labels": {
+          "region": "west",
+          "service": "api"
+        },
+        "value": 7
+      }
+    },
+    "reference": "{\"tool\":\"emit_metric\",\"arguments\":{\"name\":\"queue_depth\",\"labels\":{\"region\":\"west\",\"service\":\"api\"},\"value\":7}}"
+  },
+  {
+    "id": "ddev_tool_archive_policy",
+    "category": "Tool-call formatting",
+    "response_mode": "tool_call_json",
+    "prompt": "Mock tools are archive_item and restore_item. Choose archive_item. Return one bare JSON object with exactly tool (string) and arguments (object). arguments has exactly target (object) and options (object). target has exactly bucket (string) logs and key (string) 2025/entry. options has exactly retain_days (integer) 30 and notify (null, not omitted). No prose or fences; JSON whitespace and object-key order do not matter.",
+    "expected": {
+      "tool": "archive_item",
+      "arguments": {
+        "target": {
+          "bucket": "logs",
+          "key": "2025/entry"
+        },
+        "options": {
+          "retain_days": 30,
+          "notify": null
+        }
+      }
+    },
+    "reference": "{\"tool\":\"archive_item\",\"arguments\":{\"target\":{\"bucket\":\"logs\",\"key\":\"2025/entry\"},\"options\":{\"retain_days\":30,\"notify\":null}}}"
+  },
+  {
+    "id": "ddev_tdd_monotonic",
+    "category": "Test-driven fixing",
+    "response_mode": "python_code",
+    "prompt": "Read these tests before fixing: monotonic([1,2,2]) -> True; [3,2,1] -> True; [1,3,2] -> False; [] -> True; [4] -> True. Nondecreasing or nonincreasing counts as monotonic. Return only raw Python function definitions, no imports, prose, or fences.\n\nCurrent code:\ndef monotonic(values):\n    return values == sorted(values)",
+    "reference": "def monotonic(values):\n    return (all(values[i] <= values[i + 1] for i in range(len(values) - 1)) or\n            all(values[i] >= values[i + 1] for i in range(len(values) - 1)))\n",
+    "cases": [
+      {
+        "function": "monotonic",
+        "args": [
+          [
+            1,
+            2,
+            2
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "function": "monotonic",
+        "args": [
+          [
+            3,
+            2,
+            1
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "function": "monotonic",
+        "args": [
+          [
+            1,
+            3,
+            2
+          ]
+        ],
+        "expected": false
+      },
+      {
+        "function": "monotonic",
+        "args": [
+          []
+        ],
+        "expected": true
+      },
+      {
+        "function": "monotonic",
+        "args": [
+          [
+            4
+          ]
+        ],
+        "expected": true
+      }
+    ]
+  },
+  {
+    "id": "ddev_tdd_suffix_sum",
+    "category": "Test-driven fixing",
+    "response_mode": "python_code",
+    "prompt": "Read these tests before fixing: largest_suffix_sum([2,-5,4]) -> 4; [-3,-2] -> 0; [1,2,3] -> 6; [] -> 0. The empty suffix is allowed. Return only raw Python function definitions, no imports, prose, or fences.\n\nCurrent code:\ndef largest_suffix_sum(values):\n    return max(values)",
+    "reference": "def largest_suffix_sum(values):\n    total = 0\n    best = 0\n    for value in reversed(values):\n        total += value\n        best = max(best, total)\n    return best\n",
+    "cases": [
+      {
+        "function": "largest_suffix_sum",
+        "args": [
+          [
+            2,
+            -5,
+            4
+          ]
+        ],
+        "expected": 4
+      },
+      {
+        "function": "largest_suffix_sum",
+        "args": [
+          [
+            -3,
+            -2
+          ]
+        ],
+        "expected": 0
+      },
+      {
+        "function": "largest_suffix_sum",
+        "args": [
+          [
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": 6
+      },
+      {
+        "function": "largest_suffix_sum",
+        "args": [
+          []
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "ddev_tdd_rotation",
+    "category": "Test-driven fixing",
+    "response_mode": "python_code",
+    "prompt": "Read these tests before fixing: is_rotation('abcd','cdab') -> True; ('abcd','acbd') -> False; ('','') -> True; ('a','aa') -> False. Return a boolean; preserve case. Return only raw Python function definitions, no imports, prose, or fences.\n\nCurrent code:\ndef is_rotation(left, right):\n    return sorted(left) == sorted(right)",
+    "reference": "def is_rotation(left, right):\n    return len(left) == len(right) and right in left + left\n",
+    "cases": [
+      {
+        "function": "is_rotation",
+        "args": [
+          "abcd",
+          "cdab"
+        ],
+        "expected": true
+      },
+      {
+        "function": "is_rotation",
+        "args": [
+          "abcd",
+          "acbd"
+        ],
+        "expected": false
+      },
+      {
+        "function": "is_rotation",
+        "args": [
+          "",
+          ""
+        ],
+        "expected": true
+      },
+      {
+        "function": "is_rotation",
+        "args": [
+          "a",
+          "aa"
+        ],
+        "expected": false
+      },
+      {
+        "function": "is_rotation",
+        "args": [
+          "abab",
+          "baba"
+        ],
+        "expected": true
+      },
+      {
+        "function": "is_rotation",
+        "args": [
+          "ab",
+          "ba"
+        ],
+        "expected": true
+      }
+    ]
+  },
+  {
+    "id": "ddev_tdd_outer_quotes",
+    "category": "Test-driven fixing",
+    "response_mode": "python_code",
+    "prompt": "Read these tests before fixing: double-quoted hi becomes hi; single-quoted hi becomes hi; mismatched single/double quotes remain unchanged; x stays x; empty stays empty. Remove only one matching pair of outer single or double quotes. Return only raw Python function definitions, no imports, prose, or fences.\n\nCurrent code:\ndef strip_matching_quotes(text):\n    return text.strip(\"'\\\"\")",
+    "reference": "def strip_matching_quotes(text):\n    if len(text) >= 2 and text[0] == text[-1] and text[0] in (\"'\", '\"'):\n        return text[1:-1]\n    return text\n",
+    "cases": [
+      {
+        "function": "strip_matching_quotes",
+        "args": [
+          "\"hi\""
+        ],
+        "expected": "hi"
+      },
+      {
+        "function": "strip_matching_quotes",
+        "args": [
+          "'hi'"
+        ],
+        "expected": "hi"
+      },
+      {
+        "function": "strip_matching_quotes",
+        "args": [
+          "'hi\""
+        ],
+        "expected": "'hi\""
+      },
+      {
+        "function": "strip_matching_quotes",
+        "args": [
+          "x"
+        ],
+        "expected": "x"
+      },
+      {
+        "function": "strip_matching_quotes",
+        "args": [
+          ""
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  {
+    "id": "ddev_repo_reexport_math",
+    "category": "Small repository reasoning",
+    "response_mode": "repository_reasoning_json",
+    "prompt": "Virtual repository files:\nrates.py:\ndef scale(value):\n    return value * 3\napi.py:\nfrom rates import scale as amplify\ndef quote(value):\n    return amplify(value) + 2\napp.py:\nfrom api import quote\nprint(quote(4))\n\nWhat does app.py print? Return one bare JSON object with exactly output (integer) and reason (string). reason must be the literal tag alias_preserved_through_reexport. No extra keys, prose, or Markdown fences.",
+    "files": {
+      "rates.py": "def scale(value):\n    return value * 3\n",
+      "api.py": "from rates import scale as amplify\ndef quote(value):\n    return amplify(value) + 2\n",
+      "app.py": "from api import quote\nprint(quote(4))\n"
+    },
+    "entry": "app.py",
+    "expected": {
+      "output": 14,
+      "reason": "alias_preserved_through_reexport"
+    },
+    "reference": "{\"output\":14,\"reason\":\"alias_preserved_through_reexport\"}"
+  },
+  {
+    "id": "ddev_repo_callback_composition",
+    "category": "Small repository reasoning",
+    "response_mode": "repository_reasoning_json",
+    "prompt": "Virtual repository files:\nregistry.py:\nHANDLERS = {}\ndef register(name, function):\n    HANDLERS[name] = function\nplugins.py:\nfrom registry import register\ndef exclaim(text):\n    return text + '!'\nregister('shout', lambda text: exclaim(text.upper()))\napp.py:\nimport json\nimport plugins\nfrom registry import HANDLERS\nprint(json.dumps([HANDLERS['shout'](word) for word in ['go', 'up']]))\n\nWhat does app.py print? Return one bare JSON object with exactly output (array of two strings) and reason (string). reason must be the literal tag registration_runs_during_import. No extra keys, prose, or Markdown fences.",
+    "files": {
+      "registry.py": "HANDLERS = {}\ndef register(name, function):\n    HANDLERS[name] = function\n",
+      "plugins.py": "from registry import register\ndef exclaim(text):\n    return text + '!'\nregister('shout', lambda text: exclaim(text.upper()))\n",
+      "app.py": "import json\nimport plugins\nfrom registry import HANDLERS\nprint(json.dumps([HANDLERS['shout'](word) for word in ['go', 'up']]))\n"
+    },
+    "entry": "app.py",
+    "expected": {
+      "output": [
+        "GO!",
+        "UP!"
+      ],
+      "reason": "registration_runs_during_import"
+    },
+    "reference": "{\"output\":[\"GO!\",\"UP!\"],\"reason\":\"registration_runs_during_import\"}"
+  },
+  {
+    "id": "ddev_repo_exception_propagation",
+    "category": "Small repository reasoning",
+    "response_mode": "repository_reasoning_json",
+    "prompt": "Virtual repository files:\nevents.py:\nEVENTS = []\nreader.py:\ndef read():\n    raise OSError('unavailable')\nservice.py:\nfrom events import EVENTS\nfrom reader import read\ndef fetch():\n    try:\n        return read()\n    finally:\n        EVENTS.append('finished')\napp.py:\nimport json\nfrom events import EVENTS\nfrom service import fetch\ntry:\n    fetch()\nexcept OSError:\n    pass\nprint(json.dumps(EVENTS))\n\nWhat does app.py print? Return one bare JSON object with exactly output (array of one string) and reason (string). reason must be the literal tag finally_runs_during_propagation. No extra keys, prose, or Markdown fences.",
+    "files": {
+      "events.py": "EVENTS = []\n",
+      "reader.py": "def read():\n    raise OSError('unavailable')\n",
+      "service.py": "from events import EVENTS\nfrom reader import read\ndef fetch():\n    try:\n        return read()\n    finally:\n        EVENTS.append('finished')\n",
+      "app.py": "import json\nfrom events import EVENTS\nfrom service import fetch\ntry:\n    fetch()\nexcept OSError:\n    pass\nprint(json.dumps(EVENTS))\n"
+    },
+    "entry": "app.py",
+    "expected": {
+      "output": [
+        "finished"
+      ],
+      "reason": "finally_runs_during_propagation"
+    },
+    "reference": "{\"output\":[\"finished\"],\"reason\":\"finally_runs_during_propagation\"}"
+  },
+  {
+    "id": "ddev_repo_config_precedence",
+    "category": "Small repository reasoning",
+    "response_mode": "repository_reasoning_json",
+    "prompt": "Virtual repository files:\ndefaults.py:\nTIMEOUT = 5\nenvironment.py:\nfrom defaults import TIMEOUT as BASE\ndef timeout(override):\n    return BASE if override is None else override\napp.py:\nfrom environment import timeout\nprint(timeout(0))\n\nWhat does app.py print? Return one bare JSON object with exactly output (integer) and reason (string). reason must be the literal tag explicit_zero_override_wins. No extra keys, prose, or Markdown fences.",
+    "files": {
+      "defaults.py": "TIMEOUT = 5\n",
+      "environment.py": "from defaults import TIMEOUT as BASE\ndef timeout(override):\n    return BASE if override is None else override\n",
+      "app.py": "from environment import timeout\nprint(timeout(0))\n"
+    },
+    "entry": "app.py",
+    "expected": {
+      "output": 0,
+      "reason": "explicit_zero_override_wins"
+    },
+    "reference": "{\"output\":0,\"reason\":\"explicit_zero_override_wins\"}"
+  }
+]

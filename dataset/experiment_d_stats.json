@@ -1,0 +1,57 @@
+{
+  "total": 200,
+  "train": 160,
+  "validation": 40,
+  "category_counts": {
+    "Bug fixing": 16,
+    "Code explanation": 28,
+    "Multi-step debugging": 16,
+    "Patch generation": 40,
+    "Simple coding": 16,
+    "Small repository reasoning": 32,
+    "Test-driven fixing": 16,
+    "Tool-call formatting": 36
+  },
+  "difficulty_counts": {
+    "easy": 32,
+    "hard": 48,
+    "medium": 120
+  },
+  "response_mode_counts": {
+    "explanation_json": 28,
+    "python_code": 64,
+    "repository_reasoning_json": 32,
+    "tool_call_json": 36,
+    "unified_diff": 40
+  },
+  "family_counts": {
+    "train": 80,
+    "validation": 20,
+    "overlap": 0
+  },
+  "exact_duplicate_prompts": 0,
+  "normalized_duplicate_prompts": 0,
+  "contamination": {
+    "exact_prompt": 0,
+    "normalized_prompt": 0,
+    "suspicious_similarity": 0
+  },
+  "suspicious_details": [],
+  "validated_references": {
+    "python": 64,
+    "unified_diff": 40,
+    "json": 96
+  },
+  "train_patch_features": {
+    "deletion": 2,
+    "insertion": 2,
+    "multiple_hunks": 2,
+    "whitespace_preservation": 2
+  },
+  "sha256": {
+    "train": "9a9a213ea36de6fb2c191845bf510119b5f954ec159cb6cbd12c42fe9903d953",
+    "validation": "c38c0009a7974f7f6a71660cc7485f56addd0608c19e64e94f008c9aa25daf61"
+  },
+  "errors": [],
+  "validation_error_count": 0
+}
