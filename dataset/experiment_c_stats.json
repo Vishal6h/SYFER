@@ -1,0 +1,35 @@
+{
+  "total_examples": 120,
+  "train_examples": 88,
+  "validation_examples": 32,
+  "validated_examples": 120,
+  "category_counts": {
+    "Bug fixing": 8,
+    "Code explanation": 8,
+    "Multi-step debugging": 8,
+    "Patch generation": 32,
+    "Simple coding": 8,
+    "Small repository reasoning": 24,
+    "Test-driven fixing": 8,
+    "Tool-call formatting": 24
+  },
+  "difficulty_counts": {
+    "easy": 8,
+    "medium": 112
+  },
+  "duplicate_exact_prompts": 0,
+  "family_split_overlap": [],
+  "earlier_dataset_prompt_matches": 0,
+  "benchmark_contamination": {
+    "exact_prompt": 0,
+    "normalized_prompt": 0,
+    "expected_output_vector": 0,
+    "suspicious_similarity": 0
+  },
+  "hashes": {
+    "experiment_c_train.jsonl": "6e89c5c4655738f92154a441e5302004ddf245721f49eae0b71fa89daf1d64ba",
+    "experiment_c_validation.jsonl": "45efc706e096df71e11126ed77356b7f1fab6022eac2a91d45f340154444e291"
+  },
+  "validation_errors": [],
+  "validation_error_count": 0
+}

@@ -1,0 +1,1233 @@
+[
+  {
+    "id": "cdev_interleave",
+    "category": "Simple coding",
+    "kind": "python",
+    "prompt": "Write weave_lists(left, right) that alternates items from each list and appends the remainder of the longer list. Return a new list. Return only Python function definitions, with no imports or example calls.",
+    "reference": "def weave_lists(left, right):\n    result = []\n    size = max(len(left), len(right))\n    for index in range(size):\n        if index < len(left):\n            result.append(left[index])\n        if index < len(right):\n            result.append(right[index])\n    return result\n",
+    "cases": [
+      {
+        "function": "weave_lists",
+        "args": [
+          [
+            1,
+            3,
+            5
+          ],
+          [
+            "a",
+            "b"
+          ]
+        ],
+        "expected": [
+          1,
+          "a",
+          3,
+          "b",
+          5
+        ]
+      },
+      {
+        "function": "weave_lists",
+        "args": [
+          [],
+          [
+            "x",
+            "y"
+          ]
+        ],
+        "expected": [
+          "x",
+          "y"
+        ]
+      },
+      {
+        "function": "weave_lists",
+        "args": [
+          [
+            8
+          ],
+          []
+        ],
+        "expected": [
+          8
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cdev_hamming",
+    "category": "Simple coding",
+    "kind": "python",
+    "prompt": "Write hamming_distance(left, right) for strings of equal length: count positions containing different characters. Treat letter case as significant. Return only Python function definitions, with no imports or example calls.",
+    "reference": "def hamming_distance(left, right):\n    return sum(a != b for a, b in zip(left, right))\n",
+    "cases": [
+      {
+        "function": "hamming_distance",
+        "args": [
+          "karolin",
+          "kathrin"
+        ],
+        "expected": 3
+      },
+      {
+        "function": "hamming_distance",
+        "args": [
+          "ABC",
+          "abc"
+        ],
+        "expected": 3
+      },
+      {
+        "function": "hamming_distance",
+        "args": [
+          "same",
+          "same"
+        ],
+        "expected": 0
+      },
+      {
+        "function": "hamming_distance",
+        "args": [
+          "",
+          ""
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "cdev_border_sum",
+    "category": "Simple coding",
+    "kind": "python",
+    "prompt": "Write border_sum(grid) for a nonempty rectangular integer grid. Sum cells on the outer border, counting each corner once. Return only Python function definitions, with no imports or example calls.",
+    "reference": "def border_sum(grid):\n    rows, columns = len(grid), len(grid[0])\n    total = 0\n    for row in range(rows):\n        for column in range(columns):\n            if row == 0 or row == rows - 1 or column == 0 or column == columns - 1:\n                total += grid[row][column]\n    return total\n",
+    "cases": [
+      {
+        "function": "border_sum",
+        "args": [
+          [
+            [
+              1,
+              2,
+              3
+            ],
+            [
+              4,
+              5,
+              6
+            ],
+            [
+              7,
+              8,
+              9
+            ]
+          ]
+        ],
+        "expected": 40
+      },
+      {
+        "function": "border_sum",
+        "args": [
+          [
+            [
+              4,
+              5,
+              6
+            ]
+          ]
+        ],
+        "expected": 15
+      },
+      {
+        "function": "border_sum",
+        "args": [
+          [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ]
+          ]
+        ],
+        "expected": 10
+      }
+    ]
+  },
+  {
+    "id": "cdev_seat_position",
+    "category": "Simple coding",
+    "kind": "python",
+    "prompt": "Write seat_position(index, width) that maps a zero-based seat index to [row, column] in rows of positive width. Return only Python function definitions, with no imports or example calls.",
+    "reference": "def seat_position(index, width):\n    return [index // width, index % width]\n",
+    "cases": [
+      {
+        "function": "seat_position",
+        "args": [
+          17,
+          5
+        ],
+        "expected": [
+          3,
+          2
+        ]
+      },
+      {
+        "function": "seat_position",
+        "args": [
+          0,
+          8
+        ],
+        "expected": [
+          0,
+          0
+        ]
+      },
+      {
+        "function": "seat_position",
+        "args": [
+          24,
+          7
+        ],
+        "expected": [
+          3,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cdev_prime_square",
+    "category": "Bug fixing",
+    "kind": "python",
+    "prompt": "Fix is_prime(number) for nonnegative integers. A square of a prime is composite, while 2 is prime. Return only Python function definitions, with no imports or example calls.\n\nCurrent code:\ndef is_prime(number):\n    if number < 2:\n        return False\n    for divisor in range(2, int(number ** 0.5)):\n        if number % divisor == 0:\n            return False\n    return True",
+    "reference": "def is_prime(number):\n    if number < 2:\n        return False\n    divisor = 2\n    while divisor * divisor <= number:\n        if number % divisor == 0:\n            return False\n        divisor += 1\n    return True\n",
+    "cases": [
+      {
+        "function": "is_prime",
+        "args": [
+          49
+        ],
+        "expected": false
+      },
+      {
+        "function": "is_prime",
+        "args": [
+          2
+        ],
+        "expected": true
+      },
+      {
+        "function": "is_prime",
+        "args": [
+          1
+        ],
+        "expected": false
+      },
+      {
+        "function": "is_prime",
+        "args": [
+          97
+        ],
+        "expected": true
+      }
+    ]
+  },
+  {
+    "id": "cdev_stable_partition",
+    "category": "Bug fixing",
+    "kind": "python",
+    "prompt": "Fix stable_even_first(values): return all even integers in input order followed by all odd integers in input order. Do not mutate values. Return only Python function definitions, with no imports or example calls.\n\nCurrent code:\ndef stable_even_first(values):\n    return sorted(values)",
+    "reference": "def stable_even_first(values):\n    return [value for value in values if value % 2 == 0] + [value for value in values if value % 2 != 0]\n",
+    "cases": [
+      {
+        "function": "stable_even_first",
+        "args": [
+          [
+            7,
+            2,
+            5,
+            4,
+            2
+          ]
+        ],
+        "expected": [
+          2,
+          4,
+          2,
+          7,
+          5
+        ],
+        "unchanged_args": true
+      },
+      {
+        "function": "stable_even_first",
+        "args": [
+          [
+            3,
+            1
+          ]
+        ],
+        "expected": [
+          3,
+          1
+        ],
+        "unchanged_args": true
+      },
+      {
+        "function": "stable_even_first",
+        "args": [
+          []
+        ],
+        "expected": [],
+        "unchanged_args": true
+      }
+    ]
+  },
+  {
+    "id": "cdev_gcd_one",
+    "category": "Bug fixing",
+    "kind": "python",
+    "prompt": "Fix gcd(a, b) for nonnegative integers, including a zero argument and relatively prime numbers. Return only Python function definitions, with no imports or example calls.\n\nCurrent code:\ndef gcd(a, b):\n    while b > 1:\n        a, b = b, a % b\n    return a",
+    "reference": "def gcd(a, b):\n    while b:\n        a, b = b, a % b\n    return a\n",
+    "cases": [
+      {
+        "function": "gcd",
+        "args": [
+          21,
+          14
+        ],
+        "expected": 7
+      },
+      {
+        "function": "gcd",
+        "args": [
+          8,
+          3
+        ],
+        "expected": 1
+      },
+      {
+        "function": "gcd",
+        "args": [
+          0,
+          9
+        ],
+        "expected": 9
+      },
+      {
+        "function": "gcd",
+        "args": [
+          0,
+          0
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "cdev_percent_decode",
+    "category": "Bug fixing",
+    "kind": "python",
+    "prompt": "Fix decode_percent(text): decode %20 to space, %2F to slash, and %25 to percent sign, accepting lowercase hexadecimal letters. Leave unknown escapes unchanged. Return only Python function definitions, with no imports or example calls.\n\nCurrent code:\ndef decode_percent(text):\n    return text.replace('%20', ' ').replace('%2F', '/').replace('%25', '%')",
+    "reference": "def decode_percent(text):\n    mapping = {'20': ' ', '2F': '/', '25': '%'}\n    result = ''\n    index = 0\n    while index < len(text):\n        code = text[index + 1:index + 3].upper() if text[index:index + 1] == '%' else ''\n        if code in mapping:\n            result += mapping[code]\n            index += 3\n        else:\n            result += text[index]\n            index += 1\n    return result\n",
+    "cases": [
+      {
+        "function": "decode_percent",
+        "args": [
+          "a%20b%2Fc"
+        ],
+        "expected": "a b/c"
+      },
+      {
+        "function": "decode_percent",
+        "args": [
+          "%2f%25"
+        ],
+        "expected": "/%"
+      },
+      {
+        "function": "decode_percent",
+        "args": [
+          "plain"
+        ],
+        "expected": "plain"
+      },
+      {
+        "function": "decode_percent",
+        "args": [
+          "%ZZ"
+        ],
+        "expected": "%ZZ"
+      }
+    ]
+  },
+  {
+    "id": "cdev_generator_exhaustion",
+    "category": "Code explanation",
+    "kind": "json",
+    "prompt": "Trace this Python code. Return only JSON with exactly output and reason. The reason tag is generator_is_exhausted.\n\ngenerator = (number * number for number in (2, 3))\nprint([sum(generator), sum(generator)])",
+    "reference": "{\"output\":[13,0],\"reason\":\"generator_is_exhausted\"}",
+    "expected": {
+      "output": [
+        13,
+        0
+      ],
+      "reason": "generator_is_exhausted"
+    }
+  },
+  {
+    "id": "cdev_mutable_default",
+    "category": "Code explanation",
+    "kind": "json",
+    "prompt": "Trace this Python code. Return only JSON with exactly output and reason. The reason tag is default_list_persists.\n\ndef remember(value, seen=[]):\n    seen.append(value)\n    return len(seen)\nprint([remember(3), remember(4)])",
+    "reference": "{\"output\":[1,2],\"reason\":\"default_list_persists\"}",
+    "expected": {
+      "output": [
+        1,
+        2
+      ],
+      "reason": "default_list_persists"
+    }
+  },
+  {
+    "id": "cdev_loop_else",
+    "category": "Code explanation",
+    "kind": "json",
+    "prompt": "Trace this Python code. Return only JSON with exactly output and reason. The reason tag is loop_else_without_break.\n\nfound = []\nfor number in [2, 4, 6]:\n    if number % 2:\n        break\nelse:\n    found.append(\"none\")\nprint(len(found))",
+    "reference": "{\"output\":1,\"reason\":\"loop_else_without_break\"}",
+    "expected": {
+      "output": 1,
+      "reason": "loop_else_without_break"
+    }
+  },
+  {
+    "id": "cdev_comprehension_scope",
+    "category": "Code explanation",
+    "kind": "json",
+    "prompt": "Trace this Python code. Return only JSON with exactly output and reason. The reason tag is comprehension_has_own_scope.\n\nindex = 9\nitems = [index for index in range(3)]\nprint([index, len(items)])",
+    "reference": "{\"output\":[9,3],\"reason\":\"comprehension_has_own_scope\"}",
+    "expected": {
+      "output": [
+        9,
+        3
+      ],
+      "reason": "comprehension_has_own_scope"
+    }
+  },
+  {
+    "id": "cdev_patch_escape",
+    "category": "Patch generation",
+    "kind": "patch",
+    "prompt": "Reply only with a unified diff for markup.py, using --- a/markup.py and +++ b/markup.py. Escape ampersands and less-than signs exactly once, in that order. Preserve unrelated functions.\n\nCurrent file:\ndef label(value):\n    return value\n\ndef escape_markup(text):\n    return text.replace('<', '&lt;').replace('&', '&amp;')",
+    "reference": "--- a/markup.py\n+++ b/markup.py\n@@ -2,4 +2,5 @@\n     return value\n \n def escape_markup(text):\n-    return text.replace('<', '&lt;').replace('&', '&amp;')\n+    escaped = text.replace('&', '&amp;')\n+    return escaped.replace('<', '&lt;')\n",
+    "path": "markup.py",
+    "source": "def label(value):\n    return value\n\ndef escape_markup(text):\n    return text.replace('<', '&lt;').replace('&', '&amp;')\n",
+    "cases": [
+      {
+        "function": "label",
+        "args": [
+          "ok"
+        ],
+        "expected": "ok"
+      },
+      {
+        "function": "escape_markup",
+        "args": [
+          "<A&B>"
+        ],
+        "expected": "&lt;A&amp;B>"
+      },
+      {
+        "function": "escape_markup",
+        "args": [
+          "&"
+        ],
+        "expected": "&amp;"
+      },
+      {
+        "function": "escape_markup",
+        "args": [
+          "<"
+        ],
+        "expected": "&lt;"
+      }
+    ]
+  },
+  {
+    "id": "cdev_patch_priority",
+    "category": "Patch generation",
+    "kind": "patch",
+    "prompt": "Reply only with a unified diff for jobs.py, using --- a/jobs.py and +++ b/jobs.py. Sort jobs by ascending integer priority, retaining their original order when priorities tie. Preserve unrelated functions.\n\nCurrent file:\ndef count_jobs(jobs):\n    return len(jobs)\n\ndef order_jobs(jobs):\n    return sorted(jobs, key=lambda job: job['priority'], reverse=True)",
+    "reference": "--- a/jobs.py\n+++ b/jobs.py\n@@ -2,4 +2,4 @@\n     return len(jobs)\n \n def order_jobs(jobs):\n-    return sorted(jobs, key=lambda job: job['priority'], reverse=True)\n+    return sorted(jobs, key=lambda job: job['priority'])\n",
+    "path": "jobs.py",
+    "source": "def count_jobs(jobs):\n    return len(jobs)\n\ndef order_jobs(jobs):\n    return sorted(jobs, key=lambda job: job['priority'], reverse=True)\n",
+    "cases": [
+      {
+        "function": "count_jobs",
+        "args": [
+          [
+            {
+              "priority": 1
+            }
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "function": "order_jobs",
+        "args": [
+          [
+            {
+              "priority": 2,
+              "name": "late"
+            },
+            {
+              "priority": 1,
+              "name": "first"
+            },
+            {
+              "priority": 2,
+              "name": "later"
+            }
+          ]
+        ],
+        "expected": [
+          {
+            "priority": 1,
+            "name": "first"
+          },
+          {
+            "priority": 2,
+            "name": "late"
+          },
+          {
+            "priority": 2,
+            "name": "later"
+          }
+        ],
+        "unchanged_args": true
+      }
+    ]
+  },
+  {
+    "id": "cdev_patch_none",
+    "category": "Patch generation",
+    "kind": "patch",
+    "prompt": "Reply only with a unified diff for items.py, using --- a/items.py and +++ b/items.py. Remove only None values; preserve zero, False, and empty strings. Preserve unrelated functions.\n\nCurrent file:\ndef item_count(values):\n    return len(values)\n\ndef without_none(values):\n    return [value for value in values if value]",
+    "reference": "--- a/items.py\n+++ b/items.py\n@@ -2,4 +2,4 @@\n     return len(values)\n \n def without_none(values):\n-    return [value for value in values if value]\n+    return [value for value in values if value is not None]\n",
+    "path": "items.py",
+    "source": "def item_count(values):\n    return len(values)\n\ndef without_none(values):\n    return [value for value in values if value]\n",
+    "cases": [
+      {
+        "function": "item_count",
+        "args": [
+          [
+            0,
+            null
+          ]
+        ],
+        "expected": 2
+      },
+      {
+        "function": "without_none",
+        "args": [
+          [
+            0,
+            null,
+            false,
+            "",
+            7
+          ]
+        ],
+        "expected": [
+          0,
+          false,
+          "",
+          7
+        ]
+      },
+      {
+        "function": "without_none",
+        "args": [
+          [
+            null,
+            null
+          ]
+        ],
+        "expected": []
+      }
+    ]
+  },
+  {
+    "id": "cdev_patch_mask",
+    "category": "Patch generation",
+    "kind": "patch",
+    "prompt": "Reply only with a unified diff for display.py, using --- a/display.py and +++ b/display.py. Mask every character except the final four; strings of length four or less remain visible. Preserve unrelated functions.\n\nCurrent file:\ndef display_label(text):\n    return text\n\ndef mask_card(number):\n    return '*' * len(number)",
+    "reference": "--- a/display.py\n+++ b/display.py\n@@ -2,4 +2,5 @@\n     return text\n \n def mask_card(number):\n-    return '*' * len(number)\n+    hidden = max(0, len(number) - 4)\n+    return '*' * hidden + number[-4:]\n",
+    "path": "display.py",
+    "source": "def display_label(text):\n    return text\n\ndef mask_card(number):\n    return '*' * len(number)\n",
+    "cases": [
+      {
+        "function": "display_label",
+        "args": [
+          "card"
+        ],
+        "expected": "card"
+      },
+      {
+        "function": "mask_card",
+        "args": [
+          "1234567890"
+        ],
+        "expected": "******7890"
+      },
+      {
+        "function": "mask_card",
+        "args": [
+          "1234"
+        ],
+        "expected": "1234"
+      },
+      {
+        "function": "mask_card",
+        "args": [
+          ""
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  {
+    "id": "cdev_debug_word_score",
+    "category": "Multi-step debugging",
+    "kind": "python",
+    "prompt": "Fix both functions. word_score adds alphabet positions for ASCII letters (case-insensitive). best_word returns the earliest word with greatest score, or empty string for no words. Return only Python function definitions, with no imports or example calls.\n\nCurrent code:\ndef word_score(word):\n    return len(word)\n\ndef best_word(words):\n    return min(words, key=word_score)",
+    "reference": "def word_score(word):\n    alphabet = 'abcdefghijklmnopqrstuvwxyz'\n    return sum(alphabet.index(letter.lower()) + 1 for letter in word)\n\ndef best_word(words):\n    best = ''\n    score = -1\n    for word in words:\n        value = word_score(word)\n        if value > score:\n            best, score = word, value\n    return best\n",
+    "cases": [
+      {
+        "function": "word_score",
+        "args": [
+          "cab"
+        ],
+        "expected": 6
+      },
+      {
+        "function": "best_word",
+        "args": [
+          [
+            "bee",
+            "ace"
+          ]
+        ],
+        "expected": "bee"
+      },
+      {
+        "function": "best_word",
+        "args": [
+          [
+            "ad",
+            "bc"
+          ]
+        ],
+        "expected": "ad"
+      },
+      {
+        "function": "best_word",
+        "args": [
+          []
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  {
+    "id": "cdev_debug_grid_neighbors",
+    "category": "Multi-step debugging",
+    "kind": "python",
+    "prompt": "Fix both functions. neighbors4(grid,row,column) lists only in-bounds orthogonal coordinates as [row,column] in up, down, left, right order. count_open_neighbors counts those with a dot. Return only Python function definitions, with no imports or example calls.\n\nCurrent code:\ndef neighbors4(grid, row, column):\n    return [[row-1,column],[row+1,column],[row,column-1],[row,column+1]]\n\ndef count_open_neighbors(grid, row, column):\n    return len(neighbors4(grid, row, column))",
+    "reference": "def neighbors4(grid, row, column):\n    result = []\n    for dr, dc in ((-1,0),(1,0),(0,-1),(0,1)):\n        nr, nc = row + dr, column + dc\n        if 0 <= nr < len(grid) and 0 <= nc < len(grid[0]):\n            result.append([nr, nc])\n    return result\n\ndef count_open_neighbors(grid, row, column):\n    return sum(grid[r][c] == '.' for r, c in neighbors4(grid, row, column))\n",
+    "cases": [
+      {
+        "function": "neighbors4",
+        "args": [
+          [
+            [
+              ".",
+              "#",
+              "."
+            ],
+            [
+              ".",
+              ".",
+              "#"
+            ]
+          ],
+          0,
+          1
+        ],
+        "expected": [
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            2
+          ]
+        ]
+      },
+      {
+        "function": "count_open_neighbors",
+        "args": [
+          [
+            [
+              ".",
+              "#",
+              "."
+            ],
+            [
+              ".",
+              ".",
+              "#"
+            ]
+          ],
+          0,
+          1
+        ],
+        "expected": 3
+      },
+      {
+        "function": "neighbors4",
+        "args": [
+          [
+            [
+              ".",
+              "#",
+              "."
+            ],
+            [
+              ".",
+              ".",
+              "#"
+            ]
+          ],
+          1,
+          0
+        ],
+        "expected": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      {
+        "function": "count_open_neighbors",
+        "args": [
+          [
+            [
+              ".",
+              "#",
+              "."
+            ],
+            [
+              ".",
+              ".",
+              "#"
+            ]
+          ],
+          1,
+          0
+        ],
+        "expected": 2
+      }
+    ]
+  },
+  {
+    "id": "cdev_debug_ranges",
+    "category": "Multi-step debugging",
+    "kind": "python",
+    "prompt": "Fix both functions for half-open integer ranges [start,end] with start <= end. merge_ranges combines overlapping or touching ranges into sorted disjoint ranges. covered_length returns the total covered length. Return only Python function definitions, with no imports or example calls.\n\nCurrent code:\ndef merge_ranges(ranges):\n    return sorted(ranges)\n\ndef covered_length(ranges):\n    return sum(end - start + 1 for start, end in merge_ranges(ranges))",
+    "reference": "def merge_ranges(ranges):\n    result = []\n    for start, end in sorted(ranges):\n        if result and start <= result[-1][1]:\n            result[-1][1] = max(result[-1][1], end)\n        else:\n            result.append([start, end])\n    return result\n\ndef covered_length(ranges):\n    return sum(end - start for start, end in merge_ranges(ranges))\n",
+    "cases": [
+      {
+        "function": "merge_ranges",
+        "args": [
+          [
+            [
+              1,
+              4
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              9,
+              10
+            ]
+          ]
+        ],
+        "expected": [
+          [
+            1,
+            7
+          ],
+          [
+            9,
+            10
+          ]
+        ]
+      },
+      {
+        "function": "covered_length",
+        "args": [
+          [
+            [
+              1,
+              4
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              9,
+              10
+            ]
+          ]
+        ],
+        "expected": 7
+      },
+      {
+        "function": "merge_ranges",
+        "args": [
+          [
+            [
+              0,
+              2
+            ],
+            [
+              2,
+              5
+            ]
+          ]
+        ],
+        "expected": [
+          [
+            0,
+            5
+          ]
+        ]
+      },
+      {
+        "function": "covered_length",
+        "args": [
+          []
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "cdev_debug_money",
+    "category": "Multi-step debugging",
+    "kind": "python",
+    "prompt": "Fix both functions. parse_money accepts a nonnegative dollar string with exactly two decimal digits and returns integer cents. total_cents sums such strings; empty input totals zero. Return only Python function definitions, with no imports or example calls.\n\nCurrent code:\ndef parse_money(text):\n    dollars, cents = text.split('.')\n    return int(dollars) * 10 + int(cents)\n\ndef total_cents(values):\n    return len(values)",
+    "reference": "def parse_money(text):\n    dollars, cents = text.split('.')\n    return int(dollars) * 100 + int(cents)\n\ndef total_cents(values):\n    return sum(parse_money(value) for value in values)\n",
+    "cases": [
+      {
+        "function": "parse_money",
+        "args": [
+          "3.05"
+        ],
+        "expected": 305
+      },
+      {
+        "function": "parse_money",
+        "args": [
+          "0.99"
+        ],
+        "expected": 99
+      },
+      {
+        "function": "total_cents",
+        "args": [
+          [
+            "1.20",
+            "2.30"
+          ]
+        ],
+        "expected": 350
+      },
+      {
+        "function": "total_cents",
+        "args": [
+          []
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "cdev_tool_edit_plan",
+    "category": "Tool-call formatting",
+    "kind": "tool_call",
+    "prompt": "Mock protocol: exactly one minified JSON object, no prose. Choose plan_file_edit rather than plan_test_run because this request specifies a source edit. arguments must contain target object with path and symbol, and edits array of objects with kind and line. Plan replacing line 12 of symbol lookup in src/cache.py.",
+    "reference": "{\"tool\":\"plan_file_edit\",\"arguments\":{\"target\":{\"path\":\"src/cache.py\",\"symbol\":\"lookup\"},\"edits\":[{\"kind\":\"replace\",\"line\":12}]}}",
+    "expected": {
+      "tool": "plan_file_edit",
+      "arguments": {
+        "target": {
+          "path": "src/cache.py",
+          "symbol": "lookup"
+        },
+        "edits": [
+          {
+            "kind": "replace",
+            "line": 12
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "cdev_tool_test_plan",
+    "category": "Tool-call formatting",
+    "kind": "tool_call",
+    "prompt": "Mock protocol: exactly one minified JSON object, no prose. Choose plan_test_run rather than plan_file_edit because this request runs tests. arguments contain suite string, filters array, and dry_run boolean. Plan unit suite for filters cache and parser with dry_run true.",
+    "reference": "{\"tool\":\"plan_test_run\",\"arguments\":{\"suite\":\"unit\",\"filters\":[\"cache\",\"parser\"],\"dry_run\":true}}",
+    "expected": {
+      "tool": "plan_test_run",
+      "arguments": {
+        "suite": "unit",
+        "filters": [
+          "cache",
+          "parser"
+        ],
+        "dry_run": true
+      }
+    }
+  },
+  {
+    "id": "cdev_tool_review",
+    "category": "Tool-call formatting",
+    "kind": "tool_call",
+    "prompt": "Mock protocol: exactly one minified JSON object, no prose. Use request_review with arguments.scope object (paths array and risk string) and arguments.notify, which must be null when no notification is wanted. Review paths src/api.py and tests/test_api.py with risk medium; do not notify.",
+    "reference": "{\"tool\":\"request_review\",\"arguments\":{\"scope\":{\"paths\":[\"src/api.py\",\"tests/test_api.py\"],\"risk\":\"medium\"},\"notify\":null}}",
+    "expected": {
+      "tool": "request_review",
+      "arguments": {
+        "scope": {
+          "paths": [
+            "src/api.py",
+            "tests/test_api.py"
+          ],
+          "risk": "medium"
+        },
+        "notify": null
+      }
+    }
+  },
+  {
+    "id": "cdev_tool_two_steps",
+    "category": "Tool-call formatting",
+    "kind": "tool_call",
+    "prompt": "Mock protocol: exactly one minified JSON object, no prose. Use plan_sequence with arguments.steps array. First read config.yaml with action read, then run the unit suite with action test; include no extra keys.",
+    "reference": "{\"tool\":\"plan_sequence\",\"arguments\":{\"steps\":[{\"action\":\"read\",\"path\":\"config.yaml\"},{\"action\":\"test\",\"suite\":\"unit\"}]}}",
+    "expected": {
+      "tool": "plan_sequence",
+      "arguments": {
+        "steps": [
+          {
+            "action": "read",
+            "path": "config.yaml"
+          },
+          {
+            "action": "test",
+            "suite": "unit"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "cdev_tdd_subsequence",
+    "category": "Test-driven fixing",
+    "kind": "python",
+    "prompt": "Read these tests first: is_subsequence('ace','abcde') -> True; ('aec','abcde') -> False; ('','abc') -> True; ('a','') -> False; ('aaa','aaaa') -> True. Fix the code. Return only Python function definitions, with no imports or example calls.\n\nCurrent code:\ndef is_subsequence(short, long):\n    return all(character in long for character in short)",
+    "reference": "def is_subsequence(short, long):\n    index = 0\n    for character in long:\n        if index < len(short) and short[index] == character:\n            index += 1\n    return index == len(short)\n",
+    "cases": [
+      {
+        "function": "is_subsequence",
+        "args": [
+          "ace",
+          "abcde"
+        ],
+        "expected": true
+      },
+      {
+        "function": "is_subsequence",
+        "args": [
+          "aec",
+          "abcde"
+        ],
+        "expected": false
+      },
+      {
+        "function": "is_subsequence",
+        "args": [
+          "",
+          "abc"
+        ],
+        "expected": true
+      },
+      {
+        "function": "is_subsequence",
+        "args": [
+          "a",
+          ""
+        ],
+        "expected": false
+      },
+      {
+        "function": "is_subsequence",
+        "args": [
+          "aaa",
+          "aaaa"
+        ],
+        "expected": true
+      }
+    ]
+  },
+  {
+    "id": "cdev_tdd_ordinal",
+    "category": "Test-driven fixing",
+    "kind": "python",
+    "prompt": "Read these tests first: ordinal(1) -> '1st'; 2 -> '2nd'; 3 -> '3rd'; 11 -> '11th'; 12 -> '12th'; 13 -> '13th'; 21 -> '21st'. Fix the suffix rule. Return only Python function definitions, with no imports or example calls.\n\nCurrent code:\ndef ordinal(number):\n    suffix = {1:'st',2:'nd',3:'rd'}.get(number % 10,'th')\n    return str(number) + suffix",
+    "reference": "def ordinal(number):\n    if 11 <= number % 100 <= 13:\n        suffix = 'th'\n    else:\n        suffix = {1:'st',2:'nd',3:'rd'}.get(number % 10,'th')\n    return str(number) + suffix\n",
+    "cases": [
+      {
+        "function": "ordinal",
+        "args": [
+          1
+        ],
+        "expected": "1st"
+      },
+      {
+        "function": "ordinal",
+        "args": [
+          2
+        ],
+        "expected": "2nd"
+      },
+      {
+        "function": "ordinal",
+        "args": [
+          3
+        ],
+        "expected": "3rd"
+      },
+      {
+        "function": "ordinal",
+        "args": [
+          11
+        ],
+        "expected": "11th"
+      },
+      {
+        "function": "ordinal",
+        "args": [
+          12
+        ],
+        "expected": "12th"
+      },
+      {
+        "function": "ordinal",
+        "args": [
+          13
+        ],
+        "expected": "13th"
+      },
+      {
+        "function": "ordinal",
+        "args": [
+          21
+        ],
+        "expected": "21st"
+      }
+    ]
+  },
+  {
+    "id": "cdev_tdd_anagram",
+    "category": "Test-driven fixing",
+    "kind": "python",
+    "prompt": "Read these tests first: is_anagram('aab','aba') -> True; ('aab','abb') -> False; ('','') -> True; ('Ab','ba') -> False; ('ab','ac') -> False. Case and character multiplicity matter. Fix the code. Return only Python function definitions, with no imports or example calls.\n\nCurrent code:\ndef is_anagram(left, right):\n    return set(left) == set(right)",
+    "reference": "def is_anagram(left, right):\n    return sorted(left) == sorted(right)\n",
+    "cases": [
+      {
+        "function": "is_anagram",
+        "args": [
+          "aab",
+          "aba"
+        ],
+        "expected": true
+      },
+      {
+        "function": "is_anagram",
+        "args": [
+          "aab",
+          "abb"
+        ],
+        "expected": false
+      },
+      {
+        "function": "is_anagram",
+        "args": [
+          "",
+          ""
+        ],
+        "expected": true
+      },
+      {
+        "function": "is_anagram",
+        "args": [
+          "Ab",
+          "ba"
+        ],
+        "expected": false
+      },
+      {
+        "function": "is_anagram",
+        "args": [
+          "ab",
+          "ac"
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "cdev_tdd_ipv4",
+    "category": "Test-driven fixing",
+    "kind": "python",
+    "prompt": "Read these tests first: valid_ipv4('192.168.0.1') -> True; '256.1.1.1' -> False; '1.02.3.4' -> False; '1.2.3' -> False; '0.0.0.0' -> True. Octets are decimal 0..255 with no leading zeros except 0. Fix the code. Return only Python function definitions, with no imports or example calls.\n\nCurrent code:\ndef valid_ipv4(text):\n    parts = text.split('.')\n    return len(parts) == 4 and all(part.isdigit() for part in parts)",
+    "reference": "def valid_ipv4(text):\n    parts = text.split('.')\n    return len(parts) == 4 and all(part.isdigit() and (part == '0' or part[0] != '0') and int(part) <= 255 for part in parts)\n",
+    "cases": [
+      {
+        "function": "valid_ipv4",
+        "args": [
+          "192.168.0.1"
+        ],
+        "expected": true
+      },
+      {
+        "function": "valid_ipv4",
+        "args": [
+          "256.1.1.1"
+        ],
+        "expected": false
+      },
+      {
+        "function": "valid_ipv4",
+        "args": [
+          "1.02.3.4"
+        ],
+        "expected": false
+      },
+      {
+        "function": "valid_ipv4",
+        "args": [
+          "1.2.3"
+        ],
+        "expected": false
+      },
+      {
+        "function": "valid_ipv4",
+        "args": [
+          "0.0.0.0"
+        ],
+        "expected": true
+      }
+    ]
+  },
+  {
+    "id": "cdev_repo_overlay",
+    "category": "Small repository reasoning",
+    "kind": "json",
+    "prompt": "Virtual repository files:\ndefaults.py:\nSETTINGS = {'theme': 'light', 'timeout': 10}\nsite_overrides.py:\nOVERRIDE = {'timeout': 30}\napp.py:\nfrom defaults import SETTINGS\nfrom site_overrides import OVERRIDE\nactive = SETTINGS.copy()\nactive.update(OVERRIDE)\nprint(active['timeout'])\n\nWhat does app.py print? Answer schema: integer output and reason tag later_overlay_wins. Return only JSON with exactly the specified output and reason keys.",
+    "reference": "{\"output\":30,\"reason\":\"later_overlay_wins\"}",
+    "expected": {
+      "output": 30,
+      "reason": "later_overlay_wins"
+    },
+    "files": {
+      "defaults.py": "SETTINGS = {'theme': 'light', 'timeout': 10}\n",
+      "app.py": "from defaults import SETTINGS\nfrom site_overrides import OVERRIDE\nactive = SETTINGS.copy()\nactive.update(OVERRIDE)\nprint(active['timeout'])\n",
+      "site_overrides.py": "OVERRIDE = {'timeout': 30}\n"
+    },
+    "entry": "app.py"
+  },
+  {
+    "id": "cdev_repo_callback",
+    "category": "Small repository reasoning",
+    "kind": "json",
+    "prompt": "Virtual repository files:\nformatters.py:\ndef upper(value):\n    return value.upper()\npipeline.py:\ndef run(value, transform):\n    return transform(value) + '!'\napp.py:\nfrom formatters import upper\nfrom pipeline import run\nprint(run('go', upper))\n\nWhat does app.py print? Answer schema: string output and reason tag injected_callback. Return only JSON with exactly the specified output and reason keys.",
+    "reference": "{\"output\":\"GO!\",\"reason\":\"injected_callback\"}",
+    "expected": {
+      "output": "GO!",
+      "reason": "injected_callback"
+    },
+    "files": {
+      "formatters.py": "def upper(value):\n    return value.upper()\n",
+      "pipeline.py": "def run(value, transform):\n    return transform(value) + '!'\n",
+      "app.py": "from formatters import upper\nfrom pipeline import run\nprint(run('go', upper))\n"
+    },
+    "entry": "app.py"
+  },
+  {
+    "id": "cdev_repo_import_cache",
+    "category": "Small repository reasoning",
+    "kind": "json",
+    "prompt": "Virtual repository files:\ntracker.py:\nCOUNTER = 0\nCOUNTER += 1\napp.py:\nimport tracker\nimport tracker\nprint(tracker.COUNTER)\n\nWhat does app.py print? Answer schema: integer output and reason tag module_cached_after_first_import. Return only JSON with exactly the specified output and reason keys.",
+    "reference": "{\"output\":1,\"reason\":\"module_cached_after_first_import\"}",
+    "expected": {
+      "output": 1,
+      "reason": "module_cached_after_first_import"
+    },
+    "files": {
+      "tracker.py": "COUNTER = 0\nCOUNTER += 1\n",
+      "app.py": "import tracker\nimport tracker\nprint(tracker.COUNTER)\n"
+    },
+    "entry": "app.py"
+  },
+  {
+    "id": "cdev_repo_lazy_import",
+    "category": "Small repository reasoning",
+    "kind": "json",
+    "prompt": "Virtual repository files:\nbase.py:\ndef value():\n    return 3\nlazy.py:\ndef calculate():\n    from base import value\n    return value() * 4\napp.py:\nfrom lazy import calculate\nprint(calculate())\n\nWhat does app.py print? Answer schema: integer output and reason tag import_inside_function. Return only JSON with exactly the specified output and reason keys.",
+    "reference": "{\"output\":12,\"reason\":\"import_inside_function\"}",
+    "expected": {
+      "output": 12,
+      "reason": "import_inside_function"
+    },
+    "files": {
+      "base.py": "def value():\n    return 3\n",
+      "lazy.py": "def calculate():\n    from base import value\n    return value() * 4\n",
+      "app.py": "from lazy import calculate\nprint(calculate())\n"
+    },
+    "entry": "app.py"
+  }
+]
