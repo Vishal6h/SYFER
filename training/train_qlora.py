@@ -143,27 +143,29 @@ def format_split(tokenizer, messages, max_length):
     return [format_example(tokenizer, row, max_length) for row in messages]
 
 
-def report_paths(config, train_path, validation_path):
+def report_paths(config, train_path, validation_path, output_root=OUTPUT_ROOT):
     return {"model_id": config["model_id"], "model_revision": config["model_revision"],
             "train_file": str(train_path),
-            "validation_file": str(validation_path), "output_root": str(OUTPUT_ROOT),
-            "output_root_exists": OUTPUT_ROOT.exists(), "train_sha256": sha256(train_path),
+            "validation_file": str(validation_path), "output_root": str(output_root),
+            "output_root_exists": output_root.exists(), "train_sha256": sha256(train_path),
             "validation_sha256": sha256(validation_path)}
 
 
-def require_completed_dry_run():
-    path = HERE / "dry_run_report.json"
+def require_completed_dry_run(path=HERE / "dry_run_report.json", train_path=EXPECTED_TRAIN,
+                              validation_path=EXPECTED_VALIDATION):
     require(path.is_file(), "run the real-tokenizer dry run before training")
     report = json.loads(path.read_text(encoding="utf-8"))
     require(report.get("chat_format_status") == "passed_all_examples", "real-tokenizer dry run has not passed")
     require(report.get("assistant_label_check") is True, "assistant masking check has not passed")
-    require(report.get("train_sha256") == sha256(EXPECTED_TRAIN), "train split changed after dry run")
-    require(report.get("validation_sha256") == sha256(EXPECTED_VALIDATION),
+    require(report.get("train_sha256") == sha256(train_path), "train split changed after dry run")
+    require(report.get("validation_sha256") == sha256(validation_path),
             "validation split changed after dry run")
 
 
-def dry_run(config, train_messages, validation_messages, offline=False):
-    report = report_paths(config, EXPECTED_TRAIN, EXPECTED_VALIDATION)
+def dry_run(config, train_messages, validation_messages, offline=False,
+            train_path=EXPECTED_TRAIN, validation_path=EXPECTED_VALIDATION,
+            output_root=OUTPUT_ROOT, report_path=HERE / "dry_run_report.json"):
+    report = report_paths(config, train_path, validation_path, output_root)
     report.update({"mode": "dry-run", "train_examples": len(train_messages),
                    "validation_examples": len(validation_messages), "full_model_loaded": False})
     try:
@@ -182,7 +184,7 @@ def dry_run(config, train_messages, validation_messages, offline=False):
         report.update({"tokenizer_status": "unavailable", "chat_format_status": "deferred",
                        "detail": f"{type(error).__name__}: {error}"})
         code = 2
-    (HERE / "dry_run_report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    report_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2))
     return code
 
@@ -195,10 +197,10 @@ def check_gpu(torch, config):
     return total_gib
 
 
-def create_run_dir(mode):
-    OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
+def create_run_dir(mode, output_root=OUTPUT_ROOT):
+    output_root.mkdir(parents=True, exist_ok=True)
     identifier = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid.uuid4().hex[:8]
-    path = OUTPUT_ROOT / f"{mode}-{identifier}"
+    path = output_root / f"{mode}-{identifier}"
     path.mkdir(exist_ok=False)
     return path
 
@@ -221,7 +223,8 @@ def make_training_arguments(config, run_dir, smoke, bf16, TrainingArguments):
     )
 
 
-def train(config, train_messages, validation_messages, smoke):
+def train(config, train_messages, validation_messages, smoke,
+          train_path=EXPECTED_TRAIN, validation_path=EXPECTED_VALIDATION, output_root=OUTPUT_ROOT):
     import torch
     from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
     from torch.utils.data import Dataset
@@ -237,15 +240,16 @@ def train(config, train_messages, validation_messages, smoke):
         train_messages, validation_messages = train_messages[:2], validation_messages[:2]
     train_items = format_split(tokenizer, train_messages, config["max_sequence_length"])
     validation_items = format_split(tokenizer, validation_messages, config["max_sequence_length"])
-    run_dir = create_run_dir("smoke" if smoke else "experiment")
+    run_dir = create_run_dir("smoke" if smoke else "experiment", output_root)
     (run_dir / "config.json").write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")
     settings = config["training"]
     effective_batch_size = (settings["per_device_batch_size"] *
                             (1 if smoke else settings["gradient_accumulation_steps"]))
     expected_steps = 1 if smoke else math.ceil(len(train_items) / effective_batch_size)
     checkpoint_step = None if smoke else math.ceil(expected_steps / 2)
-    manifest = report_paths(config, EXPECTED_TRAIN, EXPECTED_VALIDATION)
+    manifest = report_paths(config, train_path, validation_path, output_root)
     manifest.update({"mode": "smoke-test" if smoke else "train", "gpu_vram_gib": round(vram_gib, 2),
+                     "experiment": config.get("experiment", "A"),
                      "train_examples_used": len(train_items), "validation_examples_used": len(validation_items),
                      "effective_batch_size": effective_batch_size,
                      "expected_optimizer_steps": expected_steps,
