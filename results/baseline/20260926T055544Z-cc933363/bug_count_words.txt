@@ -1,0 +1,12 @@
+To fix the function so that it correctly counts whitespace-separated words, we need to ensure that it handles empty or whitespace-only text correctly. The current implementation splits the text by spaces and counts the resulting list of words, which will be zero if the text is empty or contains only whitespace.
+
+Here's the corrected function:
+
+```python
+def count_words(text):
+    # Split the text by spaces and filter out empty strings
+    words = [word for word in text.split(' ') if word.strip()]
+    return len(words)
+```
+
+This version of the function uses a list comprehension to filter out any empty strings that may result from splitting the text by spaces. This ensures that only non-empty words are counted.

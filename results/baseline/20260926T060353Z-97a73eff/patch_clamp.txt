@@ -1,0 +1,7 @@
+--- a/math_utils.py
++++ b/math_utils.py
+@@ -1,4 +1,4 @@
+-def clamp(value, low, high):
+-    return min(low, max(high, value))
++def clamp(value, low, high):
++    return max(low, min(high, value))

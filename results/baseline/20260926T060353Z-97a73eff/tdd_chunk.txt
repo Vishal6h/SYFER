@@ -1,0 +1,11 @@
+To fix the implementation of the `chunks` function, we need to ensure that it correctly splits the input list into chunks of the specified size. The current implementation only returns the first chunk, which is incorrect. Here's the corrected version of the function:
+
+```python
+def chunks(values, size):
+    result = []
+    for i in range(0, len(values), size):
+        result.append(values[i:i + size])
+    return result
+```
+
+This implementation iterates over the input list in steps of the specified size, appending each chunk to the result list. This ensures that all chunks are correctly formed and returned.

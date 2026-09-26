@@ -1,0 +1,118 @@
+[
+  {
+    "id": "simple_sum_even",
+    "category": "Simple coding",
+    "kind": "python",
+    "prompt": "Write Python function sum_even(values) that returns the sum of even integers in values. Return only Python function definitions, with no imports or example calls.",
+    "cases": [{"function":"sum_even","args":[[1,2,3,4]],"expected":6},{"function":"sum_even","args":[[-4,-3,0,7]],"expected":-4},{"function":"sum_even","args":[[]],"expected":0}]
+  },
+  {
+    "id": "simple_dedupe",
+    "category": "Simple coding",
+    "kind": "python",
+    "prompt": "Write Python function unique_in_order(values) returning a new list with duplicates removed while preserving the first occurrence. Values are integers. Return only Python function definitions, with no imports or example calls.",
+    "cases": [{"function":"unique_in_order","args":[[3,1,3,2,1]],"expected":[3,1,2]},{"function":"unique_in_order","args":[[]],"expected":[]},{"function":"unique_in_order","args":[[0,0,-1,-1]],"expected":[0,-1]}]
+  },
+  {
+    "id": "bug_count_words",
+    "category": "Bug fixing",
+    "kind": "python",
+    "prompt": "Fix this function. It should count whitespace-separated words; empty or whitespace-only text has zero words. Return only the corrected Python function definition, with no imports or example calls.\n\ndef count_words(text):\n    return len(text.split(' '))",
+    "cases": [{"function":"count_words","args":["one  two\nthree"],"expected":3},{"function":"count_words","args":["   "],"expected":0},{"function":"count_words","args":["hello"],"expected":1}]
+  },
+  {
+    "id": "bug_last_index",
+    "category": "Bug fixing",
+    "kind": "python",
+    "prompt": "Fix this function so it returns the index of the last occurrence of target, or -1 if absent. Return only the corrected Python function definition, with no imports or example calls.\n\ndef last_index(values, target):\n    for i, value in enumerate(values):\n        if value == target:\n            return i\n    return -1",
+    "cases": [{"function":"last_index","args":[[2,4,2,2],2],"expected":3},{"function":"last_index","args":[[1,3],2],"expected":-1},{"function":"last_index","args":[[],0],"expected":-1}]
+  },
+  {
+    "id": "explain_slice",
+    "category": "Code explanation",
+    "kind": "json_fields",
+    "prompt": "Explain the result of this Python code. Return only a JSON object with exactly two keys: output (the integer result) and explanation (a short string).\n\nitems = [2, 5, 8, 11]\nprint(sum(items[1::2]))",
+    "expected_fields": {"output":16}
+  },
+  {
+    "id": "explain_mutation",
+    "category": "Code explanation",
+    "kind": "json_fields",
+    "prompt": "Explain the result of this Python code. Return only a JSON object with exactly two keys: output (the list printed) and explanation (a short string).\n\ndef add_one(values):\n    values = values + [1]\n    return values\noriginal = [3]\nadd_one(original)\nprint(original)",
+    "expected_fields": {"output":[3]}
+  },
+  {
+    "id": "patch_clamp",
+    "category": "Patch generation",
+    "kind": "patch",
+    "path": "math_utils.py",
+    "source": "def clamp(value, low, high):\n    return min(low, max(high, value))\n",
+    "prompt": "Produce only a unified diff for math_utils.py, using headers --- a/math_utils.py and +++ b/math_utils.py. Fix clamp so values below low return low, values above high return high, and values in range are unchanged. Current file:\n\ndef clamp(value, low, high):\n    return min(low, max(high, value))",
+    "cases": [{"function":"clamp","args":[-2,0,10],"expected":0},{"function":"clamp","args":[15,0,10],"expected":10},{"function":"clamp","args":[5,0,10],"expected":5}]
+  },
+  {
+    "id": "patch_slug",
+    "category": "Patch generation",
+    "kind": "patch",
+    "path": "text_utils.py",
+    "source": "def slug(text):\n    return text.lower().replace(' ', '-')\n",
+    "prompt": "Produce only a unified diff for text_utils.py, using headers --- a/text_utils.py and +++ b/text_utils.py. Fix slug to strip surrounding whitespace, split on any run of whitespace, lowercase words, and join them with a single hyphen. An empty or whitespace-only string becomes an empty string. Current file:\n\ndef slug(text):\n    return text.lower().replace(' ', '-')",
+    "cases": [{"function":"slug","args":["  Hello   World  "],"expected":"hello-world"},{"function":"slug","args":["A\tB\nC"],"expected":"a-b-c"},{"function":"slug","args":["   "],"expected":""}]
+  },
+  {
+    "id": "debug_inventory",
+    "category": "Multi-step debugging",
+    "kind": "python",
+    "prompt": "Fix both functions. The first adds a quantity to a product in a new inventory dict. The second returns total units across products. Do not mutate the input inventory. Return only Python function definitions, with no imports or example calls.\n\ndef add_stock(inventory, product, quantity):\n    inventory[product] = quantity\n    return inventory\n\ndef total_stock(inventory):\n    return len(inventory)",
+    "cases": [{"function":"add_stock","args":[{"pen":2},"pen",3],"expected":{"pen":5},"unchanged_args":true},{"function":"add_stock","args":[{"pen":2},"book",1],"expected":{"pen":2,"book":1},"unchanged_args":true},{"function":"total_stock","args":[{"pen":2,"book":3}],"expected":5}]
+  },
+  {
+    "id": "debug_parse_average",
+    "category": "Multi-step debugging",
+    "kind": "python",
+    "prompt": "Fix both functions. parse_scores reads comma-separated integers, ignoring blank entries and surrounding spaces. average_score returns the arithmetic mean, or 0 for no scores. Return only Python function definitions, with no imports or example calls.\n\ndef parse_scores(text):\n    return [int(part) for part in text.split(',')]\n\ndef average_score(text):\n    scores = parse_scores(text)\n    return sum(scores) // len(scores)",
+    "cases": [{"function":"parse_scores","args":[" 2, , 4,6 "],"expected":[2,4,6]},{"function":"average_score","args":["2,3"],"expected":2.5},{"function":"average_score","args":[" , "],"expected":0}]
+  },
+  {
+    "id": "tool_find_symbol",
+    "category": "Tool-call formatting",
+    "kind": "tool_call",
+    "prompt": "Mock tool protocol: reply with exactly one minified JSON object and no other text, whitespace, or Markdown. The only valid shape is {\"tool\":\"lookup_symbol\",\"arguments\":{\"symbol\":\"NAME\"}}. To look up the symbol parse_config, make the tool call now.",
+    "expected": {"tool":"lookup_symbol","arguments":{"symbol":"parse_config"}}
+  },
+  {
+    "id": "tool_find_second_symbol",
+    "category": "Tool-call formatting",
+    "kind": "tool_call",
+    "prompt": "Mock tool protocol: reply with exactly one minified JSON object and no other text, whitespace, or Markdown. The only valid shape is {\"tool\":\"lookup_symbol\",\"arguments\":{\"symbol\":\"NAME\"}}. To look up the symbol render_table, make the tool call now.",
+    "expected": {"tool":"lookup_symbol","arguments":{"symbol":"render_table"}}
+  },
+  {
+    "id": "tdd_palindrome",
+    "category": "Test-driven fixing",
+    "kind": "python",
+    "prompt": "Tests for is_palindrome(text) require: 'Race car!' -> True, 'A man, a plan, a canal: Panama' -> True, 'hello' -> False, and '' -> True. Ignore case and non-alphanumeric characters. Fix the implementation below. Return only Python function definitions, with no imports or example calls.\n\ndef is_palindrome(text):\n    return text == text[::-1]",
+    "cases": [{"function":"is_palindrome","args":["Race car!"],"expected":true},{"function":"is_palindrome","args":["A man, a plan, a canal: Panama"],"expected":true},{"function":"is_palindrome","args":["hello"],"expected":false},{"function":"is_palindrome","args":[""],"expected":true}]
+  },
+  {
+    "id": "tdd_chunk",
+    "category": "Test-driven fixing",
+    "kind": "python",
+    "prompt": "Tests for chunks(values, size) require: chunks([1,2,3,4,5], 2) -> [[1,2],[3,4],[5]], chunks([], 3) -> [], and chunks([1,2], 5) -> [[1,2]]. size is always positive. Fix the implementation below. Return only Python function definitions, with no imports or example calls.\n\ndef chunks(values, size):\n    return [values[:size]]",
+    "cases": [{"function":"chunks","args":[[1,2,3,4,5],2],"expected":[[1,2],[3,4],[5]]},{"function":"chunks","args":[[],3],"expected":[]},{"function":"chunks","args":[[1,2],5],"expected":[[1,2]]}]
+  },
+  {
+    "id": "repo_config_owner",
+    "category": "Small repository reasoning",
+    "kind": "json_fields",
+    "prompt": "Virtual repository files:\napp.py: from config import load_settings; settings = load_settings('settings.json')\nconfig.py: def load_settings(path): ...; def default_port(): return 8080\nserver.py: from config import default_port; def serve(): return default_port()\nQuestion: Which file defines the function that reads the settings file, and what is that function called? Return only JSON with exactly keys file and function.",
+    "expected_fields": {"file":"config.py","function":"load_settings"}
+  },
+  {
+    "id": "repo_call_chain",
+    "category": "Small repository reasoning",
+    "kind": "json_fields",
+    "prompt": "Virtual repository files:\nmain.py: from report import build_report; def run(rows): return build_report(rows)\nreport.py: from totals import sum_amounts; def build_report(rows): return {'total': sum_amounts(rows)}\ntotals.py: def sum_amounts(rows): return sum(row['amount'] for row in rows)\nQuestion: For main.run(rows), which file computes the numeric total, and what is the call chain of function names from run to that function? Return only JSON with exactly keys file and chain, where chain is an array of function names.",
+    "expected_fields": {"file":"totals.py","chain":["run","build_report","sum_amounts"]}
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "python_version": "3.14.4",
+  "python_executable": "/usr/bin/python3",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+  "wsl": true,
+  "memory": {
+    "memtotal_gib": 7.59,
+    "memavailable_gib": 6.18,
+    "swaptotal_gib": 2.0
+  },
+  "gpu": {
+    "status": "ok",
+    "devices": [
+      {
+        "name": "NVIDIA GeForce RTX 3050 Laptop GPU",
+        "vram_mib": 4096,
+        "free_vram_mib": 3962,
+        "compute_capability": "8.6",
+        "driver_version": "616.56"
+      }
+    ]
+  },
+  "torch_runtime": {
+    "status": "not_installed",
+    "cuda_available": null
+  },
+  "packages": {
+    "torch": null,
+    "transformers": null,
+    "datasets": null,
+    "peft": null,
+    "bitsandbytes": null,
+    "accelerate": null,
+    "trl": null
+  }
+}

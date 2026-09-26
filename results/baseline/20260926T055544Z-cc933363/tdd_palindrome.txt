@@ -1,0 +1,13 @@
+To fix the implementation of the `is_palindrome` function, we need to ensure that it ignores case and non-alphanumeric characters. Here's the corrected implementation:
+
+```python
+import re
+
+def is_palindrome(text):
+    # Remove non-alphanumeric characters and convert to lowercase
+    cleaned_text = re.sub(r'[^a-zA-Z0-9]', '', text).lower()
+    # Check if the cleaned text is equal to its reverse
+    return cleaned_text == cleaned_text[::-1]
+```
+
+This implementation uses the `re` module to remove all non-alphanumeric characters from the input text and converts it to lowercase before checking if it is a palindrome.

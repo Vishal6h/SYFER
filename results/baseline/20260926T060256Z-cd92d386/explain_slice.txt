@@ -1,0 +1,6 @@
+```json
+{
+  "output": 16,
+  "explanation": "The code calculates the sum of elements at odd indices in the list. The list is [2, 5, 8, 11], and the elements at odd indices are 5 and 11. Their sum is 16."
+}
+```

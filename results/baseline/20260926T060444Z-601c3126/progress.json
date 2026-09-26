@@ -1,0 +1,190 @@
+[
+  {
+    "id": "simple_sum_even",
+    "category": "Simple coding",
+    "passed": true,
+    "runtime_seconds": 0.618,
+    "detail": [],
+    "error": null,
+    "raw_response_file": "simple_sum_even.txt"
+  },
+  {
+    "id": "simple_dedupe",
+    "category": "Simple coding",
+    "passed": false,
+    "runtime_seconds": 0.597,
+    "detail": [
+      {
+        "case": 1,
+        "expected": [
+          3,
+          1,
+          2
+        ],
+        "actual": [
+          3,
+          1,
+          3,
+          2,
+          1
+        ]
+      }
+    ],
+    "error": null,
+    "raw_response_file": "simple_dedupe.txt"
+  },
+  {
+    "id": "bug_count_words",
+    "category": "Bug fixing",
+    "passed": false,
+    "runtime_seconds": 2.025,
+    "detail": [
+      {
+        "case": 1,
+        "expected": 3,
+        "actual": 2
+      }
+    ],
+    "error": null,
+    "raw_response_file": "bug_count_words.txt"
+  },
+  {
+    "id": "bug_last_index",
+    "category": "Bug fixing",
+    "passed": false,
+    "runtime_seconds": 1.496,
+    "detail": [
+      {
+        "case": 1,
+        "expected": 3,
+        "actual": 0
+      }
+    ],
+    "error": null,
+    "raw_response_file": "bug_last_index.txt"
+  },
+  {
+    "id": "explain_slice",
+    "category": "Code explanation",
+    "passed": true,
+    "runtime_seconds": 1.029,
+    "detail": "expected fields and exact keys",
+    "error": null,
+    "raw_response_file": "explain_slice.txt"
+  },
+  {
+    "id": "explain_mutation",
+    "category": "Code explanation",
+    "passed": false,
+    "runtime_seconds": 1.006,
+    "detail": "incorrect JSON fields or extra/missing keys",
+    "error": null,
+    "raw_response_file": "explain_mutation.txt"
+  },
+  {
+    "id": "patch_clamp",
+    "category": "Patch generation",
+    "passed": false,
+    "runtime_seconds": 0.879,
+    "detail": "hunk line counts do not match",
+    "error": "ValueError",
+    "raw_response_file": "patch_clamp.txt"
+  },
+  {
+    "id": "patch_slug",
+    "category": "Patch generation",
+    "passed": false,
+    "runtime_seconds": 1.273,
+    "detail": "hunk line counts do not match",
+    "error": "ValueError",
+    "raw_response_file": "patch_slug.txt"
+  },
+  {
+    "id": "debug_inventory",
+    "category": "Multi-step debugging",
+    "passed": false,
+    "runtime_seconds": 2.534,
+    "detail": [
+      {
+        "case": 1,
+        "expected": {
+          "pen": 5
+        },
+        "actual": {
+          "pen": 3
+        }
+      }
+    ],
+    "error": null,
+    "raw_response_file": "debug_inventory.txt"
+  },
+  {
+    "id": "debug_parse_average",
+    "category": "Multi-step debugging",
+    "passed": false,
+    "runtime_seconds": 0.803,
+    "detail": [
+      {
+        "case": 2,
+        "expected": 2.5,
+        "actual": 2
+      }
+    ],
+    "error": null,
+    "raw_response_file": "debug_parse_average.txt"
+  },
+  {
+    "id": "tool_find_symbol",
+    "category": "Tool-call formatting",
+    "passed": true,
+    "runtime_seconds": 0.225,
+    "detail": "exact match",
+    "error": null,
+    "raw_response_file": "tool_find_symbol.txt"
+  },
+  {
+    "id": "tool_find_second_symbol",
+    "category": "Tool-call formatting",
+    "passed": true,
+    "runtime_seconds": 0.218,
+    "detail": "exact match",
+    "error": null,
+    "raw_response_file": "tool_find_second_symbol.txt"
+  },
+  {
+    "id": "tdd_palindrome",
+    "category": "Test-driven fixing",
+    "passed": false,
+    "runtime_seconds": 1.987,
+    "detail": "response must contain only function definitions",
+    "error": "ValueError",
+    "raw_response_file": "tdd_palindrome.txt"
+  },
+  {
+    "id": "tdd_chunk",
+    "category": "Test-driven fixing",
+    "passed": true,
+    "runtime_seconds": 1.823,
+    "detail": [],
+    "error": null,
+    "raw_response_file": "tdd_chunk.txt"
+  },
+  {
+    "id": "repo_config_owner",
+    "category": "Small repository reasoning",
+    "passed": true,
+    "runtime_seconds": 0.28,
+    "detail": "expected fields and exact keys",
+    "error": null,
+    "raw_response_file": "repo_config_owner.txt"
+  },
+  {
+    "id": "repo_call_chain",
+    "category": "Small repository reasoning",
+    "passed": false,
+    "runtime_seconds": 0.352,
+    "detail": "incorrect JSON fields or extra/missing keys",
+    "error": null,
+    "raw_response_file": "repo_call_chain.txt"
+  }
+]

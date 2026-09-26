@@ -1,0 +1,17 @@
+{
+  "model_id": "Qwen/Qwen2.5-Coder-3B-Instruct",
+  "model_revision": "89fe5444e8baf5736e70f528f1edcc79e6616ef6",
+  "train_file": "/home/v/SYFER/dataset/syfer_train.jsonl",
+  "validation_file": "/home/v/SYFER/dataset/syfer_validation.jsonl",
+  "output_root": "/home/v/SYFER/training/output",
+  "output_root_exists": true,
+  "train_sha256": "64b0a10b0fe0f26e028b289dcbf7b5c98330ace089947671e25479e4c07afd35",
+  "validation_sha256": "57b12aa06063abad06cfe9e19564f4488e2d181df8f4df879c059a16aa929f5e",
+  "mode": "dry-run",
+  "train_examples": 130,
+  "validation_examples": 40,
+  "full_model_loaded": false,
+  "tokenizer_status": "unavailable",
+  "chat_format_status": "deferred",
+  "detail": "ModuleNotFoundError: No module named 'transformers'"
+}

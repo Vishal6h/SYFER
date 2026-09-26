@@ -1,0 +1,11 @@
+--- a/text_utils.py
++++ b/text_utils.py
+@@ -1,4 +1,10 @@
+ def slug(text):
+-    return text.lower().replace(' ', '-')
++    if not text.strip():
++        return ''
++    words = text.split()
++    words = [word.strip() for word in words]
++    words = [word.lower() for word in words]
++    return '-'.join(words)

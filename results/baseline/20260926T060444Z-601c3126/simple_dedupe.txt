@@ -1,0 +1,8 @@
+```python
+def unique_in_order(values):
+    result = []
+    for value in values:
+        if not result or value != result[-1]:
+            result.append(value)
+    return result
+```

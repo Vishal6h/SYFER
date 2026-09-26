@@ -1,0 +1,8 @@
+```python
+def parse_scores(text):
+    return [int(part.strip()) for part in text.split(',') if part.strip()]
+
+def average_score(text):
+    scores = parse_scores(text)
+    return sum(scores) // len(scores) if scores else 0
+```

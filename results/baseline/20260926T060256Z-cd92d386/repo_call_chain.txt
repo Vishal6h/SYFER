@@ -1,0 +1,6 @@
+```json
+{
+  "file": "totals.py",
+  "chain": ["sum_amounts"]
+}
+```

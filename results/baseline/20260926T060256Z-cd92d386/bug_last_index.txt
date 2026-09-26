@@ -1,0 +1,9 @@
+The function you provided is already correct for finding the last occurrence of a target value in a list. It iterates through the list using `enumerate` to get both the index and the value, and returns the index of the last occurrence of the target. If the target is not found, it returns -1. Here is the function definition:
+
+```python
+def last_index(values, target):
+    for i, value in enumerate(values):
+        if value == target:
+            return i
+    return -1
+```

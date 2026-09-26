@@ -1,0 +1,15 @@
+To fix the functions, we need to ensure that the `add_stock` function does not mutate the input inventory and that the `total_stock` function correctly calculates the total number of units across all products in the inventory. Here are the corrected versions of the functions:
+
+```python
+def add_stock(inventory, product, quantity):
+    # Create a new dictionary to avoid mutating the input inventory
+    new_inventory = inventory.copy()
+    new_inventory[product] = quantity
+    return new_inventory
+
+def total_stock(inventory):
+    # Calculate the total number of units across all products
+    return sum(inventory.values())
+```
+
+These functions now create a new dictionary `new_inventory` to avoid modifying the original `inventory` dictionary. The `total_stock` function uses the `sum` function to calculate the total number of units by summing the values in the inventory dictionary.

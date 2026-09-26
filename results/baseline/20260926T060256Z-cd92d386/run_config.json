@@ -1,0 +1,29 @@
+{
+  "model": "qwen2.5-coder:3b",
+  "model_id": "f72c60cabf6237b07f6e632b2c48d533cef25eda2efbd34bed21c5e9c01e6225",
+  "options": {
+    "temperature": 0,
+    "num_predict": 512,
+    "seed": 42
+  },
+  "tasks_file": "benchmark/tasks.json",
+  "tasks": [
+    "simple_sum_even",
+    "simple_dedupe",
+    "bug_count_words",
+    "bug_last_index",
+    "explain_slice",
+    "explain_mutation",
+    "patch_clamp",
+    "patch_slug",
+    "debug_inventory",
+    "debug_parse_average",
+    "tool_find_symbol",
+    "tool_find_second_symbol",
+    "tdd_palindrome",
+    "tdd_chunk",
+    "repo_config_owner",
+    "repo_call_chain"
+  ],
+  "started_utc": "2026-09-26T06:02:56.400016+00:00"
+}

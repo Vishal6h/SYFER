@@ -1,0 +1,47 @@
+{
+  "total_examples": 170,
+  "train_examples": 130,
+  "validation_examples": 40,
+  "category_counts": {
+    "Bug fixing": 30,
+    "Code explanation": 15,
+    "Multi-step debugging": 30,
+    "Patch generation": 30,
+    "Simple coding": 15,
+    "Small repository reasoning": 15,
+    "Test-driven fixing": 20,
+    "Tool-call formatting": 15
+  },
+  "difficulty_counts": {
+    "easy": 40,
+    "hard": 30,
+    "medium": 100
+  },
+  "category_counts_by_split": {
+    "train": {
+      "Bug fixing": 25,
+      "Code explanation": 10,
+      "Multi-step debugging": 25,
+      "Patch generation": 25,
+      "Simple coding": 10,
+      "Small repository reasoning": 10,
+      "Test-driven fixing": 15,
+      "Tool-call formatting": 10
+    },
+    "validation": {
+      "Bug fixing": 5,
+      "Code explanation": 5,
+      "Multi-step debugging": 5,
+      "Patch generation": 5,
+      "Simple coding": 5,
+      "Small repository reasoning": 5,
+      "Test-driven fixing": 5,
+      "Tool-call formatting": 5
+    }
+  },
+  "duplicate_exact_prompts": 0,
+  "benchmark_contamination_count": 0,
+  "family_split_overlap": [],
+  "validation_error_count": 0,
+  "validation_errors": []
+}

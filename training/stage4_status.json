@@ -1,0 +1,22 @@
+{
+  "stage": 4,
+  "status": "NOT_READY",
+  "reason": "The user confirmed no cloud GPU is provisioned; the local GPU has only 4096 MiB VRAM.",
+  "user_confirmed_no_cloud_gpu": true,
+  "frozen_baseline_hashes_match": true,
+  "frozen_dataset_hashes_match": true,
+  "dataset_validation_errors": 0,
+  "cloud_environment_prepared": false,
+  "dependencies_installed_on_cloud": false,
+  "real_tokenizer_dry_run_passed": false,
+  "smoke_training_started": false,
+  "optimizer_steps": 0,
+  "adapter_saved": false,
+  "adapter_reload_succeeded": null,
+  "inference_succeeded": null,
+  "peak_allocated_vram_gib": null,
+  "peak_reserved_vram_gib": null,
+  "smoke_runtime_seconds": null,
+  "training_loss": null,
+  "next_requirement": "Provide an accessible cloud GPU connection with at least 16 GiB VRAM, then follow STAGE4_SMOKE.md."
+}

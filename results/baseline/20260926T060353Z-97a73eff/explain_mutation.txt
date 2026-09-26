@@ -1,0 +1,6 @@
+```json
+{
+  "output": [3, 1],
+  "explanation": "The function `add_one` takes the list `[3]` as input, appends `1` to it, and returns the new list `[3, 1]`. The original list `[3]` is modified in place."
+}
+```

@@ -1,0 +1,4 @@
+```python
+def sum_even(values):
+    return sum(x for x in values if x % 2 == 0)
+```
