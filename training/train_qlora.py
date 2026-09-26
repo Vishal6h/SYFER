@@ -9,6 +9,7 @@ import json
 import sys
 import time
 import uuid
+from collections.abc import Mapping
 from pathlib import Path
 
 
@@ -96,11 +97,25 @@ def load_tokenizer(offline):
     return tokenizer
 
 
+def normalize_token_ids(encoded):
+    """Accept a chat-template encoding for one conversation, then validate its IDs."""
+    if isinstance(encoded, Mapping):
+        require("input_ids" in encoded, "chat template encoding has no input_ids")
+        encoded = encoded["input_ids"]
+    require(isinstance(encoded, (list, tuple)), "chat template must return token IDs")
+    if len(encoded) == 1 and isinstance(encoded[0], (list, tuple)):
+        encoded = encoded[0]
+    require(bool(encoded) and all(type(token_id) is int and token_id >= 0 for token_id in encoded),
+            "chat template input_ids must be a nonempty sequence of nonnegative integers")
+    return list(encoded)
+
+
 def format_example(tokenizer, messages, max_length):
     """Mask system/user tokens so loss applies only to the assistant answer."""
-    prompt_ids = tokenizer.apply_chat_template(messages[:2], tokenize=True, add_generation_prompt=True)
-    full_ids = tokenizer.apply_chat_template(messages, tokenize=True, add_generation_prompt=False)
-    require(isinstance(prompt_ids, list) and isinstance(full_ids, list), "chat template must return token ID lists")
+    prompt_ids = normalize_token_ids(tokenizer.apply_chat_template(
+        messages[:2], tokenize=True, add_generation_prompt=True))
+    full_ids = normalize_token_ids(tokenizer.apply_chat_template(
+        messages, tokenize=True, add_generation_prompt=False))
     require(full_ids[:len(prompt_ids)] == prompt_ids, "assistant transcript does not share the prompt prefix")
     require(len(full_ids) <= max_length, f"formatted example has {len(full_ids)} tokens, above limit {max_length}")
     require(len(full_ids) > len(prompt_ids), "assistant answer has no tokens")
