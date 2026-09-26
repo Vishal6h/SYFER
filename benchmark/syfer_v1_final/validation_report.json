@@ -1,0 +1,21 @@
+{
+  "references": {
+    "task_count": 48,
+    "category_counts": {
+      "Simple coding": 6,
+      "Bug fixing": 6,
+      "Code explanation": 6,
+      "Patch generation": 6,
+      "Multi-step debugging": 6,
+      "Test-driven fixing": 6,
+      "Tool-call formatting": 6,
+      "Small repository reasoning": 6
+    },
+    "references_passed": 48,
+    "errors": []
+  },
+  "oracle_count": 12,
+  "executable_case_count": 140,
+  "model_queries": 0,
+  "scope": "Reference validation and trusted fixture execution only"
+}

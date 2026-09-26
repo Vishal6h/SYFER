@@ -1,0 +1,17 @@
+{
+  "provenance": "Verified hash metadata from locally copied historical D-dev evaluations; no adapter weights or raw outputs fabricated. Source run files need not be committed for portability.",
+  "candidates": {
+    "experiment_b": {
+      "source": "results/experiment_d_dev/experiment_b/20260926T193905Z-ac78ed09/run_config.json",
+      "candidate_run": "training/output/experiment_b/experiment-20260926T111408Z-4838f847",
+      "adapter_model.safetensors": "41406a1fff7f4377b5fb554e46ab72133add35a53458b351b1f1401d4fd552e1",
+      "adapter_config.json": "a90d0eea29be640d778cabdb407473cdd1b4b1766ccf0269dea830328bfeecf7"
+    },
+    "experiment_d": {
+      "source": "results/experiment_d_dev/experiment_d/20260926T194859Z-b37b0aee/run_config.json",
+      "candidate_run": "training/output/experiment_d/experiment-20260926T190151Z-2a492ce7",
+      "adapter_model.safetensors": "638078fbff02f49db338f84d68c4b2dad6df01fda87a26ed2c2e9b259fa7553a",
+      "adapter_config.json": "72e18adf5776dad6f69eedaf8046be577e443126dd6a8ebbc6b358f5201dd4c9"
+    }
+  }
+}

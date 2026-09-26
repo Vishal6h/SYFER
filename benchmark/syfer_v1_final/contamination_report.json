@@ -1,0 +1,415 @@
+{
+  "prior_records": 852,
+  "final_tasks": 48,
+  "source_sha256": {
+    "benchmark/tasks.json": "48bb49ffdba9bb2e76f51251bc2b91407a0d10215c481e67041c6afa6e15bd1a",
+    "benchmark/final_holdout/tasks.json": "862cf0dc1a3d11cdff1f1555dce85fe26fdef9fd93548eb34d7b7c5bb75187a9",
+    "benchmark/experiment_c_dev/tasks.json": "d428a4186944358b420c754a70e70027e6bc0251d8320ad058db4e3609eb04b4",
+    "benchmark/experiment_d_dev/tasks.json": "c2e858e1b67dd6d8d529e7f80db9cb6a9eb6715a80066e53c686544f188ad788",
+    "dataset/syfer_train.jsonl": "64b0a10b0fe0f26e028b289dcbf7b5c98330ace089947671e25479e4c07afd35",
+    "dataset/syfer_validation.jsonl": "57b12aa06063abad06cfe9e19564f4488e2d181df8f4df879c059a16aa929f5e",
+    "dataset/experiment_b_train.jsonl": "62a87bb6b24ab6233773aa24a09fea9c89b133bc500a003da0c2730aa8c3d497",
+    "dataset/experiment_b_validation.jsonl": "5515b5a7b1ad78ae2f27cd38dc900c8bf624988a95701b20db7dcfde1f4bd01b",
+    "dataset/experiment_c_train.jsonl": "6e89c5c4655738f92154a441e5302004ddf245721f49eae0b71fa89daf1d64ba",
+    "dataset/experiment_c_validation.jsonl": "45efc706e096df71e11126ed77356b7f1fab6022eac2a91d45f340154444e291",
+    "dataset/experiment_d_train.jsonl": "9a9a213ea36de6fb2c191845bf510119b5f954ec159cb6cbd12c42fe9903d953",
+    "dataset/experiment_d_validation.jsonl": "c38c0009a7974f7f6a71660cc7485f56addd0608c19e64e94f008c9aa25daf61"
+  },
+  "exact_prompt_matches": [],
+  "normalized_prompt_matches": [],
+  "normalized_reference_matches": [],
+  "exact_expected_output_vectors": [],
+  "family_name_collisions": [],
+  "function_name_collisions": [],
+  "fixture_identifier_collisions": [],
+  "suspicious_similarity": [],
+  "nearest_same_category": [
+    {
+      "task": "v1_polynomial_fold",
+      "source": "dataset/experiment_b_train.jsonl",
+      "prior_id": "b_unique_records",
+      "sequence_ratio": 0.3098,
+      "word_jaccard": 0.1339,
+      "similarity": 0.3098
+    },
+    {
+      "task": "v1_backspace_buffer",
+      "source": "dataset/experiment_b_train.jsonl",
+      "prior_id": "b_unique_records",
+      "sequence_ratio": 0.3287,
+      "word_jaccard": 0.1217,
+      "similarity": 0.3287
+    },
+    {
+      "task": "v1_nested_leaf_addresses",
+      "source": "dataset/experiment_b_train.jsonl",
+      "prior_id": "b_unique_labels",
+      "sequence_ratio": 0.3123,
+      "word_jaccard": 0.0968,
+      "similarity": 0.3123
+    },
+    {
+      "task": "v1_cartesian_choices",
+      "source": "dataset/experiment_b_train.jsonl",
+      "prior_id": "b_unique_records",
+      "sequence_ratio": 0.2767,
+      "word_jaccard": 0.0992,
+      "similarity": 0.2767
+    },
+    {
+      "task": "v1_decimal_carry_arrays",
+      "source": "dataset/experiment_b_train.jsonl",
+      "prior_id": "b_unique_records",
+      "sequence_ratio": 0.3494,
+      "word_jaccard": 0.1368,
+      "similarity": 0.3494
+    },
+    {
+      "task": "v1_capacity_batching",
+      "source": "dataset/syfer_validation.jsonl",
+      "prior_id": "rotate_right",
+      "sequence_ratio": 0.2976,
+      "word_jaccard": 0.1066,
+      "similarity": 0.2976
+    },
+    {
+      "task": "v1_breadth_first_distance",
+      "source": "dataset/experiment_d_train.jsonl",
+      "prior_id": "d_bug_middle_gap",
+      "sequence_ratio": 0.3204,
+      "word_jaccard": 0.1583,
+      "similarity": 0.3204
+    },
+    {
+      "task": "v1_independent_grid_rows",
+      "source": "dataset/experiment_b_validation.jsonl",
+      "prior_id": "b_latest_status",
+      "sequence_ratio": 0.3465,
+      "word_jaccard": 0.1271,
+      "similarity": 0.3465
+    },
+    {
+      "task": "v1_overlapping_occurrences",
+      "source": "dataset/syfer_validation.jsonl",
+      "prior_id": "common_sorted",
+      "sequence_ratio": 0.3276,
+      "word_jaccard": 0.1304,
+      "similarity": 0.3276
+    },
+    {
+      "task": "v1_boolean_integer_boundary",
+      "source": "dataset/experiment_d_train.jsonl",
+      "prior_id": "d_bug_middle_gap",
+      "sequence_ratio": 0.338,
+      "word_jaccard": 0.1869,
+      "similarity": 0.338
+    },
+    {
+      "task": "v1_identifier_full_scan",
+      "source": "benchmark/experiment_c_dev/tasks.json",
+      "prior_id": "cdev_stable_partition",
+      "sequence_ratio": 0.3175,
+      "word_jaccard": 0.1429,
+      "similarity": 0.3175
+    },
+    {
+      "task": "v1_consecutive_alarm_state",
+      "source": "dataset/experiment_d_train.jsonl",
+      "prior_id": "d_bug_middle_gap",
+      "sequence_ratio": 0.3145,
+      "word_jaccard": 0.1727,
+      "similarity": 0.3145
+    },
+    {
+      "task": "v1_nonlocal_counter_state",
+      "source": "benchmark/experiment_d_dev/tasks.json",
+      "prior_id": "ddev_live_dict_view",
+      "sequence_ratio": 0.1395,
+      "word_jaccard": 0.3559,
+      "similarity": 0.3559
+    },
+    {
+      "task": "v1_nested_shallow_copy",
+      "source": "benchmark/experiment_d_dev/tasks.json",
+      "prior_id": "ddev_live_dict_view",
+      "sequence_ratio": 0.1674,
+      "word_jaccard": 0.35,
+      "similarity": 0.35
+    },
+    {
+      "task": "v1_eager_default_argument",
+      "source": "benchmark/experiment_c_dev/tasks.json",
+      "prior_id": "cdev_mutable_default",
+      "sequence_ratio": 0.359,
+      "word_jaccard": 0.2414,
+      "similarity": 0.359
+    },
+    {
+      "task": "v1_exception_continue_accumulator",
+      "source": "benchmark/experiment_d_dev/tasks.json",
+      "prior_id": "ddev_try_else",
+      "sequence_ratio": 0.1353,
+      "word_jaccard": 0.3968,
+      "similarity": 0.3968
+    },
+    {
+      "task": "v1_lazy_source_mutation",
+      "source": "dataset/syfer_train.jsonl",
+      "prior_id": "copy_concat",
+      "sequence_ratio": 0.3854,
+      "word_jaccard": 0.1667,
+      "similarity": 0.3854
+    },
+    {
+      "task": "v1_assignment_rhs_snapshot",
+      "source": "dataset/experiment_d_validation.jsonl",
+      "prior_id": "d_explain_set_union",
+      "sequence_ratio": 0.2564,
+      "word_jaccard": 0.3818,
+      "similarity": 0.3818
+    },
+    {
+      "task": "v1_zigzag_integer_encoding",
+      "source": "dataset/experiment_d_train.jsonl",
+      "prior_id": "d_patch_multi_hunk",
+      "sequence_ratio": 0.2851,
+      "word_jaccard": 0.1467,
+      "similarity": 0.2851
+    },
+    {
+      "task": "v1_switch_type_guard",
+      "source": "dataset/experiment_d_train.jsonl",
+      "prior_id": "d_patch_multi_hunk",
+      "sequence_ratio": 0.2973,
+      "word_jaccard": 0.1503,
+      "similarity": 0.2973
+    },
+    {
+      "task": "v1_rook_conflict_scan",
+      "source": "dataset/experiment_d_train.jsonl",
+      "prior_id": "d_patch_insert_guard",
+      "sequence_ratio": 0.2738,
+      "word_jaccard": 0.1364,
+      "similarity": 0.2738
+    },
+    {
+      "task": "v1_byte_field_roundtrip",
+      "source": "dataset/experiment_d_train.jsonl",
+      "prior_id": "d_patch_multi_hunk",
+      "sequence_ratio": 0.2763,
+      "word_jaccard": 0.1589,
+      "similarity": 0.2763
+    },
+    {
+      "task": "v1_common_margin_removal",
+      "source": "dataset/experiment_d_train.jsonl",
+      "prior_id": "d_patch_join_path",
+      "sequence_ratio": 0.276,
+      "word_jaccard": 0.1338,
+      "similarity": 0.276
+    },
+    {
+      "task": "v1_visual_tab_stops",
+      "source": "dataset/experiment_d_validation.jsonl",
+      "prior_id": "d_patch_newline_exact",
+      "sequence_ratio": 0.2893,
+      "word_jaccard": 0.1597,
+      "similarity": 0.2893
+    },
+    {
+      "task": "v1_uptime_event_pipeline",
+      "source": "dataset/syfer_train.jsonl",
+      "prior_id": "fee_pipeline",
+      "sequence_ratio": 0.3216,
+      "word_jaccard": 0.1439,
+      "similarity": 0.3216
+    },
+    {
+      "task": "v1_rational_addition_pipeline",
+      "source": "dataset/experiment_b_train.jsonl",
+      "prior_id": "b_cart_summary",
+      "sequence_ratio": 0.3423,
+      "word_jaccard": 0.1371,
+      "similarity": 0.3423
+    },
+    {
+      "task": "v1_postfix_operand_pipeline",
+      "source": "dataset/experiment_b_train.jsonl",
+      "prior_id": "b_cart_summary",
+      "sequence_ratio": 0.341,
+      "word_jaccard": 0.1269,
+      "similarity": 0.341
+    },
+    {
+      "task": "v1_luhn_payload_pipeline",
+      "source": "dataset/syfer_train.jsonl",
+      "prior_id": "token_frequency",
+      "sequence_ratio": 0.338,
+      "word_jaccard": 0.1269,
+      "similarity": 0.338
+    },
+    {
+      "task": "v1_permission_bit_pipeline",
+      "source": "benchmark/experiment_c_dev/tasks.json",
+      "prior_id": "cdev_debug_word_score",
+      "sequence_ratio": 0.3068,
+      "word_jaccard": 0.1527,
+      "similarity": 0.3068
+    },
+    {
+      "task": "v1_retry_delay_pipeline",
+      "source": "dataset/experiment_c_validation.jsonl",
+      "prior_id": "c_debug_polygon",
+      "sequence_ratio": 0.3244,
+      "word_jaccard": 0.1145,
+      "similarity": 0.3244
+    },
+    {
+      "task": "v1_edit_distance_table",
+      "source": "dataset/syfer_train.jsonl",
+      "prior_id": "clean_tags",
+      "sequence_ratio": 0.2882,
+      "word_jaccard": 0.069,
+      "similarity": 0.2882
+    },
+    {
+      "task": "v1_dependency_schedule",
+      "source": "dataset/experiment_b_train.jsonl",
+      "prior_id": "b_tdd_bounds",
+      "sequence_ratio": 0.2835,
+      "word_jaccard": 0.0746,
+      "similarity": 0.2835
+    },
+    {
+      "task": "v1_integer_square_bound",
+      "source": "dataset/syfer_validation.jsonl",
+      "prior_id": "positive_squares",
+      "sequence_ratio": 0.2942,
+      "word_jaccard": 0.096,
+      "similarity": 0.2942
+    },
+    {
+      "task": "v1_dotted_release_order",
+      "source": "dataset/syfer_validation.jsonl",
+      "prior_id": "positive_squares",
+      "sequence_ratio": 0.3081,
+      "word_jaccard": 0.0677,
+      "similarity": 0.3081
+    },
+    {
+      "task": "v1_wildcard_full_match",
+      "source": "dataset/experiment_b_train.jsonl",
+      "prior_id": "b_tdd_threshold",
+      "sequence_ratio": 0.2842,
+      "word_jaccard": 0.0746,
+      "similarity": 0.2842
+    },
+    {
+      "task": "v1_smallest_absent_positive",
+      "source": "dataset/experiment_b_train.jsonl",
+      "prior_id": "b_tdd_bounds",
+      "sequence_ratio": 0.3303,
+      "word_jaccard": 0.1026,
+      "similarity": 0.3303
+    },
+    {
+      "task": "v1_symbol_scope_query",
+      "source": "dataset/experiment_c_train.jsonl",
+      "prior_id": "c_tool_nested",
+      "sequence_ratio": 0.3065,
+      "word_jaccard": 0.1333,
+      "similarity": 0.3065
+    },
+    {
+      "task": "v1_read_disjoint_ranges",
+      "source": "dataset/experiment_d_validation.jsonl",
+      "prior_id": "d_tool_open_span",
+      "sequence_ratio": 0.3189,
+      "word_jaccard": 0.3222,
+      "similarity": 0.3222
+    },
+    {
+      "task": "v1_test_execution_environment",
+      "source": "dataset/experiment_c_train.jsonl",
+      "prior_id": "c_tool_schedule",
+      "sequence_ratio": 0.3125,
+      "word_jaccard": 0.1304,
+      "similarity": 0.3125
+    },
+    {
+      "task": "v1_repository_metadata_subset",
+      "source": "benchmark/experiment_d_dev/tasks.json",
+      "prior_id": "ddev_tool_catalog_exact",
+      "sequence_ratio": 0.1441,
+      "word_jaccard": 0.3294,
+      "similarity": 0.3294
+    },
+    {
+      "task": "v1_diagnostic_severity_filter",
+      "source": "benchmark/experiment_d_dev/tasks.json",
+      "prior_id": "ddev_tool_catalog_exact",
+      "sequence_ratio": 0.1353,
+      "word_jaccard": 0.3034,
+      "similarity": 0.3034
+    },
+    {
+      "task": "v1_ordered_inspection_plan",
+      "source": "dataset/experiment_c_train.jsonl",
+      "prior_id": "c_tool_schedule",
+      "sequence_ratio": 0.2882,
+      "word_jaccard": 0.1758,
+      "similarity": 0.2882
+    },
+    {
+      "task": "v1_context_suppression_flow",
+      "source": "dataset/experiment_d_validation.jsonl",
+      "prior_id": "d_repo_finally_mutation",
+      "sequence_ratio": 0.4123,
+      "word_jaccard": 0.3095,
+      "similarity": 0.4123
+    },
+    {
+      "task": "v1_snapshot_unregister_dispatch",
+      "source": "dataset/experiment_d_train.jsonl",
+      "prior_id": "d_repo_lazy_lookup",
+      "sequence_ratio": 0.3642,
+      "word_jaccard": 0.2875,
+      "similarity": 0.3642
+    },
+    {
+      "task": "v1_layered_configuration_deletion",
+      "source": "dataset/experiment_d_train.jsonl",
+      "prior_id": "d_repo_imported_binding",
+      "sequence_ratio": 0.3692,
+      "word_jaccard": 0.3205,
+      "similarity": 0.3692
+    },
+    {
+      "task": "v1_captured_default_export",
+      "source": "benchmark/experiment_d_dev/tasks.json",
+      "prior_id": "ddev_repo_exception_propagation",
+      "sequence_ratio": 0.4103,
+      "word_jaccard": 0.3291,
+      "similarity": 0.4103
+    },
+    {
+      "task": "v1_cached_property_refresh",
+      "source": "benchmark/experiment_d_dev/tasks.json",
+      "prior_id": "ddev_repo_exception_propagation",
+      "sequence_ratio": 0.3648,
+      "word_jaccard": 0.3176,
+      "similarity": 0.3648
+    },
+    {
+      "task": "v1_shared_memoized_dependency",
+      "source": "dataset/experiment_d_train.jsonl",
+      "prior_id": "d_repo_alias_multiplier",
+      "sequence_ratio": 0.4039,
+      "word_jaccard": 0.3425,
+      "similarity": 0.4039
+    }
+  ],
+  "renamed_large_ast_matches": [],
+  "limitations": "Lexical screens cannot prove algorithmic independence. Generic language constructs and canonical contracts necessarily recur. See novelty_review.md for manual family review; no model outputs used.",
+  "blocking_matches": 0
+}

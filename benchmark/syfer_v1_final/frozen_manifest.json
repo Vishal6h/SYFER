@@ -1,0 +1,61 @@
+{
+  "benchmark": "SYFER v1 final",
+  "created_utc": "2026-09-26T20:54:47.166309+00:00",
+  "task_count": 48,
+  "category_distribution": {
+    "Simple coding": 6,
+    "Bug fixing": 6,
+    "Code explanation": 6,
+    "Patch generation": 6,
+    "Multi-step debugging": 6,
+    "Test-driven fixing": 6,
+    "Tool-call formatting": 6,
+    "Small repository reasoning": 6
+  },
+  "contract_version": "D1 / final-v1 explicit task contracts",
+  "sha256": {
+    "benchmark/syfer_v1_final/README.md": "a62046810b6fbdc23d8331e431a969a80f1aa8e47629f108ef8a1d39adf07860",
+    "benchmark/syfer_v1_final/build_tasks.py": "1fd41bbb574ecc09cd49289dabd795720d9aee5d95008e08c077f25bd9e8be6c",
+    "benchmark/syfer_v1_final/candidate_provenance.json": "7c0ad849014bc6770a53184e51b4bfa0b5f8b2259dc847d75e9b6aec64afd5bc",
+    "benchmark/syfer_v1_final/check_contamination.py": "5a33ff6be0569ac11ae65d1902e1ab38f2a424e19d37ae070aefac38cb8b8eb1",
+    "benchmark/syfer_v1_final/contamination_report.json": "23ddddcaf592ca2d59d881a4b2dc04e8e252274dd502295a369842bfb5e84c6c",
+    "benchmark/syfer_v1_final/freeze.py": "744ae46b59c5c9fa1a6d847ff1508a34f2b3414911e688e00471dac513c0f682",
+    "benchmark/syfer_v1_final/novelty_review.md": "d4048878d88c259fc0c693b5fc3193f13fe5cfa20c664043835a8c4387f084b9",
+    "benchmark/syfer_v1_final/restore_candidates.py": "5a299f74013d428839542e37b075e866e0dab27b77f558c054738792b35eb914",
+    "benchmark/syfer_v1_final/tasks.json": "2e62b1706e811e6abc6f94aa0af0dfc0d2a895b7961df915f031caf5f5ef5129",
+    "benchmark/syfer_v1_final/test_final.py": "22cbc933c88898d680b31251c2378cd9d84789cebc7b1cbc0800caae03f2ceba",
+    "benchmark/syfer_v1_final/validate_final.py": "063c6c542f025512f92ef03448337fb74487f7071250549bb72cec533d45a00f",
+    "benchmark/syfer_v1_final/validation_report.json": "670ed17400bdb1520ea3d3e3b1115a2032c908cf1dd660ea58f51405882c9bd4",
+    "benchmark/evaluate_syfer_v1_final.py": "20ac915a52dd4415f0a5e67d9a04c71103f94a0b6c7f80a42d6b07704b8f073f",
+    "benchmark/compare_syfer_v1_final.py": "c1492aa237c593bbd0ef3ea6f79e593e791a41662ca063861cb7984ff7d0600a",
+    "docs/TRAINING_OUTPUT_CONTRACT.md": "346fde854d59d5c02daaa55bb74e9c00dd9fdb1de732070795eda87c3e74733f",
+    "benchmark/tasks.json": "48bb49ffdba9bb2e76f51251bc2b91407a0d10215c481e67041c6afa6e15bd1a",
+    "benchmark/final_holdout/tasks.json": "862cf0dc1a3d11cdff1f1555dce85fe26fdef9fd93548eb34d7b7c5bb75187a9",
+    "benchmark/experiment_c_dev/tasks.json": "d428a4186944358b420c754a70e70027e6bc0251d8320ad058db4e3609eb04b4",
+    "benchmark/experiment_d_dev/tasks.json": "c2e858e1b67dd6d8d529e7f80db9cb6a9eb6715a80066e53c686544f188ad788",
+    "dataset/syfer_train.jsonl": "64b0a10b0fe0f26e028b289dcbf7b5c98330ace089947671e25479e4c07afd35",
+    "dataset/syfer_validation.jsonl": "57b12aa06063abad06cfe9e19564f4488e2d181df8f4df879c059a16aa929f5e",
+    "dataset/experiment_b_train.jsonl": "62a87bb6b24ab6233773aa24a09fea9c89b133bc500a003da0c2730aa8c3d497",
+    "dataset/experiment_b_validation.jsonl": "5515b5a7b1ad78ae2f27cd38dc900c8bf624988a95701b20db7dcfde1f4bd01b",
+    "dataset/experiment_c_train.jsonl": "6e89c5c4655738f92154a441e5302004ddf245721f49eae0b71fa89daf1d64ba",
+    "dataset/experiment_c_validation.jsonl": "45efc706e096df71e11126ed77356b7f1fab6022eac2a91d45f340154444e291",
+    "dataset/experiment_d_train.jsonl": "9a9a213ea36de6fb2c191845bf510119b5f954ec159cb6cbd12c42fe9903d953",
+    "dataset/experiment_d_validation.jsonl": "c38c0009a7974f7f6a71660cc7485f56addd0608c19e64e94f008c9aa25daf61"
+  },
+  "fixtures": "All task source/repository fixtures are inline in tasks.json; no separate fixture files.",
+  "contamination_status": {
+    "blocking_matches": 0,
+    "prior_records_checked": 852,
+    "manual_family_review": "benchmark/syfer_v1_final/novelty_review.md",
+    "limitations": "Lexical screens cannot prove algorithmic independence. Generic language constructs and canonical contracts necessarily recur. See novelty_review.md for manual family review; no model outputs used."
+  },
+  "creation_notes": [
+    "No candidate model queried during authorship, validation, tests or freeze.",
+    "References are independently authored deterministic oracles, not generated model responses.",
+    "This is the final model-development benchmark for SYFER v1; no training after exposure.",
+    "Official strict score and fence-only diagnostic are distinct; no retroactive changes.",
+    "No winner selected; policy preregistered in README and comparison script."
+  ],
+  "model_evaluations_at_freeze": 0,
+  "no_model_has_been_evaluated_yet": true
+}
