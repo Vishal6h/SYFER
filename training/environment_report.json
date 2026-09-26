@@ -5,7 +5,7 @@
   "wsl": true,
   "memory": {
     "memtotal_gib": 7.59,
-    "memavailable_gib": 6.18,
+    "memavailable_gib": 6.13,
     "swaptotal_gib": 2.0
   },
   "gpu": {
@@ -14,7 +14,7 @@
       {
         "name": "NVIDIA GeForce RTX 3050 Laptop GPU",
         "vram_mib": 4096,
-        "free_vram_mib": 3962,
+        "free_vram_mib": 3804,
         "compute_capability": "8.6",
         "driver_version": "616.56"
       }

@@ -6,6 +6,7 @@ import datetime as dt
 import hashlib
 import importlib.metadata
 import json
+import math
 import sys
 import time
 import uuid
@@ -64,6 +65,21 @@ def load_config(path):
     require(train["weight_decay"] >= 0 and train["logging_steps"] >= 1 and train["max_grad_norm"] > 0,
             "invalid optimizer/logging settings")
     return config
+
+
+def require_experiment_a(config):
+    """Refuse a full run if the first experiment's planned settings drift."""
+    require(config["seed"] == 42 and config["max_sequence_length"] == 768,
+            "Experiment A seed or sequence limit changed")
+    require(config["lora"] == {"rank": 8, "alpha": 16, "dropout": 0.05,
+                               "target_modules": "all-linear", "bias": "none"},
+            "Experiment A LoRA settings changed")
+    require(config["training"] == {"epochs": 1, "learning_rate": 0.0001,
+                                   "per_device_batch_size": 1, "gradient_accumulation_steps": 8,
+                                   "gradient_checkpointing": True, "warmup_ratio": 0.05,
+                                   "weight_decay": 0.0, "logging_steps": 1,
+                                   "max_grad_norm": 1.0},
+            "Experiment A training settings changed")
 
 
 def load_messages(path):
@@ -209,7 +225,8 @@ def train(config, train_messages, validation_messages, smoke):
     import torch
     from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
     from torch.utils.data import Dataset
-    from transformers import AutoModelForCausalLM, BitsAndBytesConfig, Trainer, TrainingArguments, set_seed
+    from transformers import (AutoModelForCausalLM, BitsAndBytesConfig, Trainer,
+                              TrainerCallback, TrainingArguments, set_seed)
 
     vram_gib = check_gpu(torch, config)  # Guard before tokenizer or model downloads.
     started = time.monotonic()
@@ -222,12 +239,27 @@ def train(config, train_messages, validation_messages, smoke):
     validation_items = format_split(tokenizer, validation_messages, config["max_sequence_length"])
     run_dir = create_run_dir("smoke" if smoke else "experiment")
     (run_dir / "config.json").write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")
+    settings = config["training"]
+    effective_batch_size = (settings["per_device_batch_size"] *
+                            (1 if smoke else settings["gradient_accumulation_steps"]))
+    expected_steps = 1 if smoke else math.ceil(len(train_items) / effective_batch_size)
+    checkpoint_step = None if smoke else math.ceil(expected_steps / 2)
     manifest = report_paths(config, EXPECTED_TRAIN, EXPECTED_VALIDATION)
     manifest.update({"mode": "smoke-test" if smoke else "train", "gpu_vram_gib": round(vram_gib, 2),
                      "train_examples_used": len(train_items), "validation_examples_used": len(validation_items),
+                     "effective_batch_size": effective_batch_size,
+                     "expected_optimizer_steps": expected_steps,
+                     "adapter_checkpoint_step": checkpoint_step,
                      "requirements": {name: importlib.metadata.version(name) for name in
                                       ("torch", "transformers", "peft", "bitsandbytes", "accelerate", "datasets", "trl")}})
     (run_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    status_path = run_dir / "run_status.json"
+
+    def save_status(status, **details):
+        status_path.write_text(json.dumps({"status": status, "optimizer_steps": details.pop("optimizer_steps", 0),
+                                           **details}, indent=2) + "\n", encoding="utf-8")
+
+    save_status("in_progress", optimizer_steps=0)
 
     def guarded(stage, operation):
         try:
@@ -242,6 +274,7 @@ def train(config, train_messages, validation_messages, smoke):
                 "peak_reserved_vram_gib": round(torch.cuda.max_memory_reserved() / 1024 ** 3, 3),
             }
             (run_dir / "failure.json").write_text(json.dumps(failure, indent=2) + "\n", encoding="utf-8")
+            save_status("failed", optimizer_steps=0, **failure)
             raise
 
     dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
@@ -284,18 +317,50 @@ def train(config, train_messages, validation_messages, smoke):
     trainer = Trainer(model=model, args=args, train_dataset=EncodedDataset(train_items),
                       eval_dataset=EncodedDataset(validation_items), data_collator=collate,
                       processing_class=tokenizer)
-    initial_eval = guarded("initial_validation", trainer.evaluate) if smoke else None
-    train_result = guarded("optimizer_step", trainer.train)
-    eval_result = guarded("final_validation", trainer.evaluate)
-    # save_strategy='no' avoids full checkpoints; PEFT writes adapter weights/config only.
-    guarded("adapter_save", lambda: model.save_pretrained(run_dir / "adapter", safe_serialization=True))
-    (run_dir / "loss_history.json").write_text(json.dumps({"train": train_result.metrics,
-                                                            "initial_validation": initial_eval,
-                                                            "validation": eval_result,
-                                                            "log_history": trainer.state.log_history}, indent=2) + "\n",
-                                               encoding="utf-8")
-    if smoke:
+    if not smoke:
+        class AdapterCheckpoint(TrainerCallback):
+            def on_step_end(self, args, state, control, **kwargs):
+                if state.global_step == checkpoint_step:
+                    model.save_pretrained(run_dir / "adapter-checkpoints" / f"step-{state.global_step:04d}",
+                                          safe_serialization=True)
+                return control
+
+        trainer.add_callback(AdapterCheckpoint())
+    try:
+        initial_eval = guarded("initial_validation", trainer.evaluate) if smoke else None
+        train_result = guarded("optimizer_step", trainer.train)
+        eval_result = guarded("final_validation", trainer.evaluate)
+        # save_strategy='no' avoids full checkpoints; PEFT writes adapter weights/config only.
+        guarded("adapter_save", lambda: model.save_pretrained(run_dir / "adapter", safe_serialization=True))
+        (run_dir / "loss_history.json").write_text(json.dumps({"train": train_result.metrics,
+                                                                "initial_validation": initial_eval,
+                                                                "validation": eval_result,
+                                                                "log_history": trainer.state.log_history}, indent=2) + "\n",
+                                                   encoding="utf-8")
         adapter_bytes = sum(path.stat().st_size for path in (run_dir / "adapter").rglob("*") if path.is_file())
+        run_metrics = {
+            "completed_normally": True,
+            "optimizer_steps": trainer.state.global_step,
+            "effective_batch_size": effective_batch_size,
+            "training_loss": train_result.metrics.get("train_loss"),
+            "validation_loss": eval_result.get("eval_loss"),
+            "peak_allocated_vram_gib": round(torch.cuda.max_memory_allocated() / 1024 ** 3, 3),
+            "peak_reserved_vram_gib": round(torch.cuda.max_memory_reserved() / 1024 ** 3, 3),
+            "runtime_seconds": round(time.monotonic() - started, 3),
+            "adapter_size_bytes": adapter_bytes,
+        }
+        if not smoke:
+            (run_dir / "experiment_metrics.json").write_text(json.dumps(run_metrics, indent=2) + "\n",
+                                                               encoding="utf-8")
+        save_status("complete", optimizer_steps=trainer.state.global_step,
+                    runtime_seconds=run_metrics["runtime_seconds"])
+    except BaseException as error:
+        save_status("interrupted" if isinstance(error, KeyboardInterrupt) else "failed",
+                    optimizer_steps=trainer.state.global_step,
+                    runtime_seconds=round(time.monotonic() - started, 3),
+                    error=f"{type(error).__name__}: {error}")
+        raise
+    if smoke:
         smoke_metrics = {
             "optimizer_steps": trainer.state.global_step,
             "initial_validation_loss": initial_eval.get("eval_loss"),
@@ -340,6 +405,8 @@ def main():
             return 0
         if args.dry_run:
             return dry_run(config, train_messages, validation_messages, offline=args.offline)
+        if args.train:
+            require_experiment_a(config)
         require_completed_dry_run()
         return train(config, train_messages, validation_messages, smoke=args.smoke_test)
     except (ImportError, OSError, ValueError, KeyError, json.JSONDecodeError) as error:

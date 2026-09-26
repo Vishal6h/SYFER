@@ -9,7 +9,7 @@ python3.12 -m venv training/.venv
 training/.venv/bin/python -m pip install --no-cache-dir -r training/requirements.txt
 training/.venv/bin/python -B training/check_environment.py
 training/.venv/bin/python -B training/train_qlora.py --check-config
-training/.venv/bin/python -B training/train_qlora.py --dry-run --download-tokenizer
+training/.venv/bin/python -B training/train_qlora.py --dry-run
 training/.venv/bin/python -B training/train_qlora.py --smoke-test
 ```
 

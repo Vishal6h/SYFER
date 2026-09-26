@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reload one saved smoke adapter and make one harmless completion."""
+"""Reload a saved smoke or Experiment A adapter and make one harmless completion."""
 
 import argparse
 import json
@@ -34,11 +34,11 @@ def generate_completion(model, tokenizer, inference_mode, device):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("run_dir", type=Path, help="An existing training/output/smoke-* directory")
+    parser.add_argument("run_dir", type=Path, help="An existing smoke-* or experiment-* output directory")
     args = parser.parse_args()
     run_dir = args.run_dir.resolve()
-    if run_dir.parent != OUTPUT_ROOT or not run_dir.name.startswith("smoke-"):
-        parser.error("run_dir must be a smoke directory directly under training/output")
+    if run_dir.parent != OUTPUT_ROOT or not run_dir.name.startswith(("smoke-", "experiment-")):
+        parser.error("run_dir must be a smoke or experiment directory directly under training/output")
     adapter_dir = run_dir / "adapter"
     if not (adapter_dir / "adapter_config.json").is_file():
         parser.error("saved adapter is missing")
@@ -77,7 +77,8 @@ def main():
         report["traceback"] = "".join(traceback.format_exception(error))
         report["error"] = f"{type(error).__name__}: {error}"
     (run_dir / "reload_report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-    metrics_path = run_dir / "smoke_metrics.json"
+    metrics_path = run_dir / ("smoke_metrics.json" if run_dir.name.startswith("smoke-")
+                              else "experiment_metrics.json")
     if metrics_path.exists():
         metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
         metrics["reload_succeeded"] = report["reload_succeeded"]

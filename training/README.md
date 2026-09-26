@@ -1,6 +1,6 @@
-# Stage 3: QLoRA setup and experiment plan
+# SYFER QLoRA setup and Experiment A
 
-**No training has been run.** This directory prepares a future cloud experiment for the exact upstream model [`Qwen/Qwen2.5-Coder-3B-Instruct`](https://huggingface.co/Qwen/Qwen2.5-Coder-3B-Instruct), pinned to [commit `89fe5444e8baf5736e70f528f1edcc79e6616ef6`](https://huggingface.co/Qwen/Qwen2.5-Coder-3B-Instruct/commit/89fe5444e8baf5736e70f528f1edcc79e6616ef6). The stock local Ollama model remains an inference and baseline target. The Stage 1 benchmark stays frozen; the Stage 2 validation split is used for loss monitoring, never as training text.
+Stage 4's one-step smoke test, adapter reload, and inference succeeded on the Lightning Tesla T4 according to the user's report. The smoke artifacts remain on that host. Experiment A has **not** run in this workspace. Training uses the exact upstream model [`Qwen/Qwen2.5-Coder-3B-Instruct`](https://huggingface.co/Qwen/Qwen2.5-Coder-3B-Instruct), pinned to [commit `89fe5444e8baf5736e70f528f1edcc79e6616ef6`](https://huggingface.co/Qwen/Qwen2.5-Coder-3B-Instruct/commit/89fe5444e8baf5736e70f528f1edcc79e6616ef6). The Stage 1 benchmark stays frozen; the Stage 2 validation split is used for loss monitoring, never as training text.
 
 ## Local environment and feasibility
 
@@ -12,7 +12,7 @@ Keep local Ollama inference as the deployment target after a later stage evaluat
 
 ## Files and commands
 
-`config.json` is Experiment A. `train_qlora.py` validates the config and data with the standard library, formats all three-message records using the Qwen tokenizer chat template, masks system/user tokens from the loss, and trains LoRA adapters on a 4-bit NF4 base only when `--train` or `--smoke-test` is explicitly supplied. It never saves base weights. Each training invocation reserves a new timestamped directory under `training/output/`; adapter weights and training/validation loss go there. `save_strategy="no"` prevents full Trainer checkpoints. `check_environment.py` records hardware and installed package versions without installing anything.
+`config.json` is Experiment A. `train_qlora.py` validates the config and data with the standard library, formats all three-message records using the Qwen tokenizer chat template, masks system/user tokens from the loss, and trains LoRA adapters on a 4-bit NF4 base only when `--train` or `--smoke-test` is explicitly supplied. The `--train` path checks the exact Experiment A settings before loading model weights. It never saves base weights. Each training invocation reserves a new timestamped directory under `training/output/`; `save_strategy="no"` prevents full Trainer checkpoints. Experiment A saves a midpoint adapter-only checkpoint, a final adapter, loss history, metrics, a config snapshot, and an in-progress/complete/failed status. An interrupted run is never marked complete. `check_environment.py` records hardware and installed package versions without installing anything.
 
 From the SYFER root:
 
@@ -23,15 +23,17 @@ python3 -B training/train_qlora.py --check-config
 python3 -B training/train_qlora.py --dry-run
 ```
 
-The dry run reads both JSONL files, checks config and output paths, attempts to load the exact upstream tokenizer **from the local cache only**, applies its chat template to all records, checks the 768-token limit and assistant loss mask, and loads no model weights. If `transformers` or the tokenizer is unavailable, it writes `dry_run_report.json`, exits with code 2, and names the missing step. It does not download anything. The currently available environment is expected to stop at tokenizer loading. Re-run on the future cloud environment after installing dependencies and caching the tokenizer. `--check-config` succeeds without ML packages.
+The dry run reads both JSONL files, checks config and output paths, downloads the exact pinned tokenizer into `training/cache/` if needed, applies its chat template to all records, checks the 768-token limit and assistant loss mask, and loads no model weights. Use `--dry-run --offline` to require an already populated project cache. If `transformers` or the tokenizer is unavailable, it writes `dry_run_report.json`, exits with code 2, and names the missing step. `--check-config` succeeds without ML packages.
 
-For a future cloud machine in Stage 4, use Python 3.12 and install the pinned `requirements.txt` with the appropriate CUDA PyTorch build. The pins were selected from published releases but have **not** been installed or integration-tested here. Verify that `torch.cuda.is_available()` and BF16 support match the cloud GPU. A one-step smoke test would then be:
+The tested Lightning stack uses Python 3.12.11, CUDA PyTorch 2.14.0, torchvision 0.29.0, Transformers 5.17.0, PEFT 0.21.0, Accelerate 1.15.0, and bitsandbytes 0.50.2. `requirements.txt` pins this stack. Transformers 5 chat templates return a `BatchEncoding`; the formatter extracts and validates its `input_ids`. Transformers 5 also uses `warmup_steps=0.05` for a 5% warmup ratio. The PyTorch/torchvision pins are paired as tested on Lightning. Keep the installed CUDA-compatible build; do not replace it with a CPU build.
+
+For the completed Stage 4 smoke test, the explicit command was:
 
 ```sh
 python3 -B training/train_qlora.py --smoke-test
 ```
 
-The script rejects GPUs below the configured 12 GiB minimum before loading the tokenizer or full model. Full training requires the separate `--train` flag. Neither command was run in Stage 3.
+The script rejects GPUs below the configured 12 GiB minimum before loading the tokenizer or full model. Full training requires the separate `--train` flag. Follow [STAGE5_EXPERIMENT_A.md](STAGE5_EXPERIMENT_A.md) for the exact preflight and run command. This local checkout cannot run Experiment A on its 4 GB GPU.
 
 ## Experiment plan
 

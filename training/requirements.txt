@@ -1,6 +1,7 @@
 # Stage 4 cloud training environment; install with Python 3.12 and a CUDA-capable PyTorch build.
 # Versions are pinned for reproducibility. Stage 3 does not install them.
 torch==2.14.0
+torchvision==0.29.0
 transformers==5.17.0
 peft==0.21.0
 bitsandbytes==0.50.2

@@ -1,12 +1,13 @@
 """CPU-only checks for the pinned Transformers TrainingArguments settings."""
 
 import importlib.util
+import copy
 import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
 
-from train_qlora import HERE, load_config, make_training_arguments
+from train_qlora import HERE, load_config, make_training_arguments, require_experiment_a
 
 
 class TrainingArgumentsTests(unittest.TestCase):
@@ -15,6 +16,7 @@ class TrainingArgumentsTests(unittest.TestCase):
         cls.config = load_config(HERE / "config.json")
 
     def test_smoke_and_experiment_settings_without_model(self):
+        require_experiment_a(self.config)
         with tempfile.TemporaryDirectory(dir=HERE) as directory:
             for smoke, expected_steps, expected_accumulation, expected_eval in (
                 (True, 1, 1, "no"),
@@ -33,6 +35,12 @@ class TrainingArgumentsTests(unittest.TestCase):
                     self.assertEqual(args.logging_strategy, "steps")
                     self.assertTrue(args.fp16)
                     self.assertFalse(args.bf16)
+
+    def test_experiment_a_rejects_parameter_drift(self):
+        changed = copy.deepcopy(self.config)
+        changed["training"]["epochs"] = 2
+        with self.assertRaisesRegex(ValueError, "Experiment A training settings changed"):
+            require_experiment_a(changed)
 
     @unittest.skipUnless(importlib.util.find_spec("transformers"), "Transformers is not installed locally")
     def test_real_transformers_arguments_on_cpu(self):
