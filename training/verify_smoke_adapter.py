@@ -3,12 +3,33 @@
 
 import argparse
 import json
+import traceback
+from collections.abc import Mapping
 from pathlib import Path
 
 from train_qlora import CACHE_DIR, MODEL_ID, MODEL_REVISION, OUTPUT_ROOT, load_config, load_tokenizer
 
 
 PROMPT = "Answer briefly: what does Python len([1, 2]) return?"
+
+
+def generate_completion(model, tokenizer, inference_mode, device):
+    inputs = tokenizer.apply_chat_template([{"role": "user", "content": PROMPT}],
+                                           add_generation_prompt=True, tokenize=True,
+                                           return_dict=True, return_tensors="pt")
+    if not isinstance(inputs, Mapping) or "input_ids" not in inputs:
+        raise ValueError("chat template must return an encoding with input_ids")
+    inputs = inputs.to(device)
+    input_ids = inputs["input_ids"]
+    if input_ids.ndim != 2 or input_ids.shape[0] != 1 or input_ids.shape[1] == 0:
+        raise ValueError("chat template must return one nonempty tokenized prompt")
+    with inference_mode():
+        output = model.generate(**inputs, max_new_tokens=24, do_sample=False,
+                                pad_token_id=tokenizer.eos_token_id)
+    completion = tokenizer.decode(output[0][input_ids.shape[-1]:], skip_special_tokens=True).strip()
+    if not completion:
+        raise RuntimeError("model generated an empty completion")
+    return completion
 
 
 def main():
@@ -46,17 +67,14 @@ def main():
         model = PeftModel.from_pretrained(base, adapter_dir, is_trainable=False)
         model.eval()
         report["reload_succeeded"] = True
-        inputs = tokenizer.apply_chat_template([{"role": "user", "content": PROMPT}],
-                                               add_generation_prompt=True, tokenize=True,
-                                               return_tensors="pt").to("cuda")
-        with torch.inference_mode():
-            output = model.generate(inputs, max_new_tokens=24, do_sample=False,
-                                    pad_token_id=tokenizer.eos_token_id)
-        completion = tokenizer.decode(output[0][inputs.shape[-1]:], skip_special_tokens=True).strip()
-        if not completion:
-            raise RuntimeError("model generated an empty completion")
+        completion = generate_completion(model, tokenizer, torch.inference_mode, "cuda")
         report.update({"inference_succeeded": True, "prompt": PROMPT, "completion": completion})
     except Exception as error:
+        last_frame = traceback.extract_tb(error.__traceback__)[-1]
+        report["error_type"] = type(error).__name__
+        report["error_message"] = str(error)
+        report["traceback_location"] = f"{last_frame.filename}:{last_frame.lineno} in {last_frame.name}"
+        report["traceback"] = "".join(traceback.format_exception(error))
         report["error"] = f"{type(error).__name__}: {error}"
     (run_dir / "reload_report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     metrics_path = run_dir / "smoke_metrics.json"
