@@ -8,4 +8,25 @@ MODEL="$ROOT/model/SYFER-v1-Q4_K_M.gguf"
 LLAMA_CLI="$(cat "$ROOT/config/llama-cli-path")"
 [[ -x "$LLAMA_CLI" ]] || { echo 'llama-cli is unavailable. Run ./setup.sh again.' >&2; exit 1; }
 
-exec "$LLAMA_CLI" -m "$MODEL" -c 4096 -ngl 99 "$@"
+if [[ -t 1 ]]; then clear; fi
+printf '\033[0;36m'
+head -n 6 "$ROOT/assets/syfer-banner.txt"
+printf '\033[0m'
+tail -n +7 "$ROOT/assets/syfer-banner.txt"
+printf '\n\033[0;36mStarting SYFER v1...\033[0m\n\n'
+
+GPU_LAYERS=0
+if command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi -L >/dev/null 2>&1 && ldd "$LLAMA_CLI" 2>/dev/null | grep -q 'ggml-cuda'; then
+  GPU_LAYERS=99
+fi
+
+while true; do
+  if [[ -t 0 ]]; then
+    printf '>>> '
+  fi
+  IFS= read -r prompt || break
+  [[ "$prompt" == /exit || "$prompt" == /quit ]] && break
+  [[ -z "$prompt" ]] && continue
+  "$LLAMA_CLI" -m "$MODEL" -c 4096 -ngl "$GPU_LAYERS" -n 1024 -p "$prompt" --log-disable --no-display-prompt --no-perf "$@" 2>/dev/null
+  printf '\n'
+done

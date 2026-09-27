@@ -32,8 +32,22 @@ else
   if [[ ! -d "$ROOT/runtime/llama.cpp/.git" ]]; then
     git clone --depth 1 https://github.com/ggml-org/llama.cpp.git "$ROOT/runtime/llama.cpp"
   fi
-  cmake -S "$ROOT/runtime/llama.cpp" -B "$ROOT/runtime/llama.cpp/build" -DCMAKE_BUILD_TYPE=Release -DGGML_CUDA=OFF
-  cmake --build "$ROOT/runtime/llama.cpp/build" --config Release --target llama-cli -j 2
+  CUDA=OFF
+  if command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi -L >/dev/null 2>&1 && command -v nvcc >/dev/null 2>&1; then
+    CUDA=ON
+  fi
+  if ! cmake -S "$ROOT/runtime/llama.cpp" -B "$ROOT/runtime/llama.cpp/build" -DCMAKE_BUILD_TYPE=Release -DGGML_CUDA="$CUDA"; then
+    if [[ "$CUDA" != ON ]]; then exit 1; fi
+    echo 'CUDA build unavailable; falling back to CPU.' >&2
+    CUDA=OFF
+    cmake -S "$ROOT/runtime/llama.cpp" -B "$ROOT/runtime/llama.cpp/build" -DCMAKE_BUILD_TYPE=Release -DGGML_CUDA=OFF
+  fi
+  if ! cmake --build "$ROOT/runtime/llama.cpp/build" --config Release --target llama-cli -j 2; then
+    if [[ "$CUDA" != ON ]]; then exit 1; fi
+    echo 'CUDA build failed; falling back to CPU.' >&2
+    cmake -S "$ROOT/runtime/llama.cpp" -B "$ROOT/runtime/llama.cpp/build" -DCMAKE_BUILD_TYPE=Release -DGGML_CUDA=OFF
+    cmake --build "$ROOT/runtime/llama.cpp/build" --config Release --target llama-cli -j 2
+  fi
   printf '%s\n' "$ROOT/runtime/llama.cpp/build/bin/llama-cli" > "$ROOT/config/llama-cli-path"
 fi
 
