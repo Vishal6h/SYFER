@@ -1,0 +1,22 @@
+SYFER v1
+
+SYFER is a modified derivative of:
+
+Qwen/Qwen2.5-Coder-3B-Instruct
+
+Base revision:
+
+89fe5444e8baf5736e70f528f1edcc79e6616ef6
+
+SYFER contains modifications introduced through custom QLoRA fine-tuning,
+model merging, GGUF conversion, and quantization.
+
+Improved using Qwen.
+
+SYFER Project Author:
+VISHAL K
+
+Creator & Model Developer
+
+Project:
+https://github.com/Vishal6h/SYFER
