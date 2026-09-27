@@ -99,35 +99,53 @@ These values are from one local test system and are not universal performance gu
 
 ## Installation
 
-Requirements:
+SYFER supports a simple local setup flow.
 
-- Ollama
-- Linux / WSL / supported Ollama platform
+### 1. Clone the repository
 
-Clone the repository:
+~~~bash
+git clone https://github.com/Vishal6h/SYFER.git
+cd SYFER
+~~~
 
-    git clone https://github.com/Vishal6h/SYFER.git
-    cd SYFER
+### 2. Run the setup script
 
-Download:
+~~~bash
+./setup.sh
+~~~
 
-    SYFER-v1-Q4_K_M.gguf
+The setup script automatically:
 
-Place it inside:
+- downloads `SYFER-v1-Q4_K_M.gguf` from the SYFER v1.0 GitHub Release
+- verifies the model using its SHA256 checksum
+- prepares the local `llama.cpp` runtime
+- enables CUDA acceleration when an NVIDIA GPU and CUDA are available
+- falls back to CPU when CUDA is unavailable
+- configures the runtime used by SYFER
 
-    release/
+You do not need to manually download, rename, or move the GGUF model.
 
-Install:
+### 3. Start SYFER
 
-    ./scripts/install_syfer.sh
+~~~bash
+./syfer
+~~~
 
-Run:
+After the initial setup, SYFER can be launched anytime with:
 
-    ./scripts/run_syfer.sh
+~~~bash
+cd SYFER
+./syfer
+~~~
 
-Or directly:
+### Quick Start
 
-    ollama run syfer:v1
+~~~bash
+git clone https://github.com/Vishal6h/SYFER.git
+cd SYFER
+./setup.sh
+./syfer
+~~~
 
 ## Limitations
 
