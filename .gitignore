@@ -11,3 +11,7 @@ release/Modelfile
 # Local experiment archives
 SYFER_*_Results.tar.gz
 SYFER_Experiment_*.tar.gz
+
+# Local setup logs and incomplete downloads
+logs/
+model/*.part

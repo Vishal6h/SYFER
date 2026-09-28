@@ -1,28 +1,11 @@
 # SYFER v1 Release
 
-Expected model:
+Canonical model: `model/SYFER-v1-Q4_K_M.gguf` (relative to the repository).
+Download source: https://github.com/Vishal6h/SYFER/releases/tag/v1.0
 
-SYFER-v1-Q4_K_M.gguf
+Run `./setup.sh` on Linux / WSL / Android, or `.\setup.ps1` on Windows.
+Both verify SHA-256 using Python and `release/checksums.txt`. Missing models are
+downloaded from the official release; existing valid models are reused.
 
-The primary setup places the GGUF in `model/`. The Ollama installer and both launchers use that same location.
-
-Expected layout:
-
-model/
-- SYFER-v1-Q4_K_M.gguf
-
-Verify the model with:
-
-    cd model && sha256sum -c ../release/checksums.txt
-
-Install:
-
-    ./scripts/install_syfer.sh
-
-Run:
-
-    ./scripts/run_syfer.sh
-
-Project:
-
-https://github.com/Vishal6h/SYFER
+Launch with `./syfer` or `.\syfer.ps1`. To explicitly prepare and use Ollama,
+pass `--backend ollama` to setup and launch. See [installation](../README.md).

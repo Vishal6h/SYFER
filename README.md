@@ -97,64 +97,119 @@ Observed on the test system:
 
 These values are from one local test system and are not universal performance guarantees.
 
-## Installation
+## Linux / WSL / Android
 
-SYFER supports a simple local setup flow.
-
-### 1. Clone the repository
-
-~~~bash
-git clone https://github.com/Vishal6h/SYFER.git
-cd SYFER
-~~~
-
-### 2. Run the setup script
-
-~~~bash
-./setup.sh
-~~~
-
-The setup script automatically:
-
-- downloads `SYFER-v1-Q4_K_M.gguf` from the SYFER v1.0 GitHub Release
-- verifies the model using its SHA256 checksum
-- prepares the local `llama-server` runtime
-- enables CUDA acceleration when an NVIDIA GPU and CUDA are available
-- falls back to CPU when CUDA is unavailable
-- configures the runtime used by SYFER
-
-You do not need to manually download, rename, or move the GGUF model.
-
-### 3. Start SYFER
-
-~~~bash
-./syfer
-~~~
-
-The launcher keeps the conversation in a SYFER terminal interface. It starts a quiet `llama-server` on localhost and stops it on exit. Use `./syfer --debug` to show backend startup output. Type `/help`, `/clear`, or `/exit` in chat. For an existing Ollama installation, run `./scripts/install_syfer.sh` once and then `./scripts/run_syfer.sh` to use the same interface through Ollama's local API.
-
-SYFER supports up to 32K context, but the llama.cpp/mobile launcher defaults to 4096 to reduce RAM usage. Set `SYFER_CONTEXT` when more memory is available:
-
-~~~bash
-SYFER_CONTEXT=8192 ./syfer
-SYFER_CONTEXT=32768 ./syfer
-~~~
-
-After the initial setup, SYFER can be launched anytime with:
-
-~~~bash
-cd SYFER
-./syfer
-~~~
-
-### Quick Start
-
-~~~bash
+```bash
 git clone https://github.com/Vishal6h/SYFER.git
 cd SYFER
 ./setup.sh
 ./syfer
-~~~
+```
+
+Requires Python 3.8 or newer. Setup verifies the official SHA-256 checksum and,
+if the model is absent, downloads the existing v1.0 release (~1.8 GB) into
+`model/SYFER-v1-Q4_K_M.gguf`. A corrupt existing model is preserved and reported.
+You can also place the official asset there yourself before setup.
+
+Setup uses a responding local Ollama service when available. Otherwise it finds
+or builds llama-server. Building requires Git, CMake and a C++ compiler; install
+these with your environment's package manager. CUDA is optional, with CPU build
+fallback. Existing llama-server installations are reused. Hardware acceleration
+is managed by the backend; NVIDIA hardware is not required.
+
+For native Termux, install prerequisites with `pkg install python git cmake clang`
+and use the same commands above. Linux distributions running on Android use their
+own package manager. Performance and available context depend on device memory.
+
+## Windows
+
+Use native PowerShell; WSL is not required. Install Git, Python 3.8 or newer
+(with the Python launcher or Python on PATH), and Ollama. Start the Ollama app
+before setup. Ollama is the simplest Windows runtime; no compiler or CUDA Toolkit
+is needed for this route.
+
+```powershell
+git clone https://github.com/Vishal6h/SYFER.git
+cd SYFER
+.\setup.ps1
+.\syfer.ps1
+```
+
+Setup downloads the same official GGUF only if missing, verifies it with Python
+hashlib, and creates `syfer:v1` in the local Ollama service. Allow disk space for
+the ~1.8 GB GGUF and the backend's model storage. Python discovery tries `py -3`,
+`python`, then `python3`.
+
+If local script execution is blocked, use a process-only policy override:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
+powershell -ExecutionPolicy Bypass -File .\syfer.ps1
+```
+
+These commands do not change system or user execution policy.
+
+For an existing Windows llama.cpp installation, provide `llama-server.exe` and
+its required DLLs. Setup does not install Windows build tools:
+
+```powershell
+$env:SYFER_LLAMA_SERVER="C:\Tools\llama.cpp\llama-server.exe"
+.\setup.ps1 --backend llama
+.\syfer.ps1 --backend llama
+```
+
+Repository-local `runtime/llama.cpp/build/bin/Release/llama-server.exe` and
+`runtime/llama.cpp/build/bin/llama-server.exe` are also discovered, followed by PATH.
+Paths containing spaces are supported. Native Windows execution still needs host
+validation; the current automated checks run on Linux and validate Windows path
+and launcher logic statically.
+
+## Runtime and commands
+
+Both launchers use `scripts/syfer_chat.py`, the same banner, and the same combined
+`assets/system-prompt.txt` and `assets/project-facts.txt`. The frontend talks to
+Ollama at `127.0.0.1:11434` or starts a quiet llama-server on a free loopback port.
+It stops its owned server on exit, EOF or Ctrl+C. Ctrl+C during generation exits
+the session. Ollama is an independently managed service and stays running.
+
+Automatic chat selection prefers a responding Ollama with `syfer:v1`, then an
+available llama-server. Setup can prepare `syfer:v1` when Ollama responds. To pin
+a backend, pass `--backend ollama` or `--backend llama` to setup and launch, or set
+`SYFER_BACKEND`. An explicit selection never silently switches backends.
+The older `scripts/install_syfer.sh` and `scripts/run_syfer.sh` remain Ollama aliases.
+
+- `/help`: show SYFER commands.
+- `/clear`: clear the current conversation, retaining system and project facts.
+- `/exit`: exit; aliases are `/quit`, `/bye`, `/q`, `exit`, `quit`, `bye` (case insensitive).
+- Ctrl+C or EOF: exit cleanly (Windows console EOF is usually Ctrl+Z then Enter).
+
+SYFER has no built-in persistent memory across sessions. Conversation history is
+kept in memory during the session. Responses currently appear after generation
+finishes; use `/clear` for long conversations approaching the context limit.
+
+The maximum model context is 32,768 tokens. llama.cpp/mobile defaults to 4,096:
+
+```bash
+SYFER_CONTEXT=8192 ./syfer --backend llama
+```
+
+```powershell
+$env:SYFER_CONTEXT="8192"
+.\syfer.ps1 --backend llama
+```
+
+Ollama setup retains its 32,768-token configuration; `SYFER_CONTEXT` configures
+llama-server. Larger contexts need more memory.
+
+Setup logs compiler/backend output to `logs/setup.log` (replaced each setup run).
+Use `./setup.sh --debug` or `.\setup.ps1 -Debug` to display it live. Runtime debug
+is `./syfer --debug` or `.\syfer.ps1 --debug`. Normal chat does not write transcripts.
+The cyan logo uses ANSI only on compatible terminals, with plain text fallback.
+
+For manual model installation, download `SYFER-v1-Q4_K_M.gguf` from the
+[official v1.0 release](https://github.com/Vishal6h/SYFER/releases/tag/v1.0), place
+it in `model/`, and rerun setup. Setup always checks `release/checksums.txt` using
+Python, without requiring `sha256sum`.
 
 ## Limitations
 

@@ -1,0 +1,18 @@
+Name: SYFER
+Version: v1.0
+Description: Lightweight Specialized Coding Model
+Creator & Model Developer: VISHAL K
+Official repository: https://github.com/Vishal6h/SYFER
+Public release date: September 27, 2026
+Base model: Qwen2.5-Coder-3B-Instruct
+Original base model developer: Qwen team / Alibaba Cloud
+Development: SYFER was further developed using custom QLoRA fine-tuning, evaluation, model merging, GGUF conversion, and quantization.
+Primary purpose: Practical programming assistance, debugging, coding help, code explanation, and local coding workflows.
+Release: GGUF Q4_K_M
+Supported runtimes: Ollama and llama.cpp
+Maximum supported model context: 32,768 tokens
+Default llama.cpp/mobile context: 4,096 tokens
+Context configuration on Linux: SYFER_CONTEXT=8192 ./syfer
+Context configuration in Windows PowerShell: $env:SYFER_CONTEXT="8192" then .\syfer.ps1
+
+SYFER has NO built-in persistent memory across separate sessions. It can use the current conversation while messages remain in active context. Starting a new independent session does not restore previous chats. Persistent memory supplied by an external application is an application feature, not a built-in SYFER model feature.
