@@ -3,6 +3,10 @@ __pycache__/
 
 # Release model weights
 release/*.gguf
+model/*.gguf
+runtime/llama.cpp/
+config/llama-cli-path
+release/Modelfile
 
 # Local experiment archives
 SYFER_*_Results.tar.gz

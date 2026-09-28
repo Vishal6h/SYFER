@@ -7,6 +7,7 @@ SHA256='667dc80f693f8387829c3554ee1708f650035a9b3f2d69282fcf6abf3e08f9bf'
 MODEL_URL="${SYFER_MODEL_URL:-https://github.com/Vishal6h/SYFER/releases/download/v1.0/SYFER-v1-Q4_K_M.gguf}"
 
 command -v sha256sum >/dev/null || { echo 'Missing sha256sum.' >&2; exit 1; }
+command -v python3 >/dev/null || { echo 'Install Python 3 and rerun setup.' >&2; exit 1; }
 mkdir -p "$ROOT/model" "$ROOT/runtime"
 
 if [[ -f "$MODEL" ]] && printf '%s  %s\n' "$SHA256" "$MODEL" | sha256sum -c --status; then
@@ -20,11 +21,10 @@ else
   echo 'SYFER model verified.'
 fi
 
-if [[ -n "${SYFER_LLAMA_CLI:-}" ]]; then
-  [[ -x "$SYFER_LLAMA_CLI" ]] || { echo 'SYFER_LLAMA_CLI is not executable.' >&2; exit 1; }
-  printf '%s\n' "$SYFER_LLAMA_CLI" > "$ROOT/config/llama-cli-path"
-elif command -v llama-cli >/dev/null 2>&1; then
-  command -v llama-cli > "$ROOT/config/llama-cli-path"
+if [[ -n "${SYFER_LLAMA_SERVER:-}" ]]; then
+  [[ -x "$SYFER_LLAMA_SERVER" ]] || { echo 'SYFER_LLAMA_SERVER is not executable.' >&2; exit 1; }
+elif [[ -x "$ROOT/runtime/llama.cpp/build/bin/llama-server" ]] || command -v llama-server >/dev/null 2>&1; then
+  echo 'llama-server found.'
 else
   for tool in git cmake c++; do
     command -v "$tool" >/dev/null || { echo "Install $tool and rerun setup." >&2; exit 1; }
@@ -42,13 +42,12 @@ else
     CUDA=OFF
     cmake -S "$ROOT/runtime/llama.cpp" -B "$ROOT/runtime/llama.cpp/build" -DCMAKE_BUILD_TYPE=Release -DGGML_CUDA=OFF
   fi
-  if ! cmake --build "$ROOT/runtime/llama.cpp/build" --config Release --target llama-cli -j 2; then
+  if ! cmake --build "$ROOT/runtime/llama.cpp/build" --config Release --target llama-server -j 2; then
     if [[ "$CUDA" != ON ]]; then exit 1; fi
     echo 'CUDA build failed; falling back to CPU.' >&2
     cmake -S "$ROOT/runtime/llama.cpp" -B "$ROOT/runtime/llama.cpp/build" -DCMAKE_BUILD_TYPE=Release -DGGML_CUDA=OFF
-    cmake --build "$ROOT/runtime/llama.cpp/build" --config Release --target llama-cli -j 2
+    cmake --build "$ROOT/runtime/llama.cpp/build" --config Release --target llama-server -j 2
   fi
-  printf '%s\n' "$ROOT/runtime/llama.cpp/build/bin/llama-cli" > "$ROOT/config/llama-cli-path"
 fi
 
 echo 'Setup complete. Run ./syfer'

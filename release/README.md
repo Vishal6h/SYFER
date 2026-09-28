@@ -4,18 +4,16 @@ Expected model:
 
 SYFER-v1-Q4_K_M.gguf
 
-Place the GGUF inside this directory.
+The primary setup places the GGUF in `model/`. The Ollama installer and both launchers use that same location.
 
 Expected layout:
 
-release/
-- README.md
-- checksums.txt
+model/
 - SYFER-v1-Q4_K_M.gguf
 
 Verify the model with:
 
-    sha256sum -c release/checksums.txt
+    cd model && sha256sum -c ../release/checksums.txt
 
 Install:
 

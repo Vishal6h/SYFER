@@ -118,7 +118,7 @@ The setup script automatically:
 
 - downloads `SYFER-v1-Q4_K_M.gguf` from the SYFER v1.0 GitHub Release
 - verifies the model using its SHA256 checksum
-- prepares the local `llama.cpp` runtime
+- prepares the local `llama-server` runtime
 - enables CUDA acceleration when an NVIDIA GPU and CUDA are available
 - falls back to CPU when CUDA is unavailable
 - configures the runtime used by SYFER
@@ -129,6 +129,15 @@ You do not need to manually download, rename, or move the GGUF model.
 
 ~~~bash
 ./syfer
+~~~
+
+The launcher keeps the conversation in a SYFER terminal interface. It starts a quiet `llama-server` on localhost and stops it on exit. Use `./syfer --debug` to show backend startup output. Type `/help`, `/clear`, or `/exit` in chat. For an existing Ollama installation, run `./scripts/install_syfer.sh` once and then `./scripts/run_syfer.sh` to use the same interface through Ollama's local API.
+
+SYFER supports up to 32K context, but the llama.cpp/mobile launcher defaults to 4096 to reduce RAM usage. Set `SYFER_CONTEXT` when more memory is available:
+
+~~~bash
+SYFER_CONTEXT=8192 ./syfer
+SYFER_CONTEXT=32768 ./syfer
 ~~~
 
 After the initial setup, SYFER can be launched anytime with:

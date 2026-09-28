@@ -11,10 +11,8 @@
 Project Author : VISHAL K
 Role           : Creator & Model Developer
 Version        : SYFER v1.0
+
 GitHub         : https://github.com/Vishal6h/SYFER
 
-Base Model     : Qwen2.5-Coder-3B-Instruct
-Fine-Tuning    : QLoRA
-Release Format : GGUF Q4_K_M
-Runtime        : llama.cpp
+Improved using Qwen
 ────────────────────────────────────────────────
